@@ -48,16 +48,37 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
+  			},
+  			turquoise: {
+  				50: 'hsl(var(--turquoise-50))',
+  				100: 'hsl(var(--turquoise-100))',
+  				200: 'hsl(var(--turquoise-200))',
+  				300: 'hsl(var(--turquoise-300))',
+  				400: 'hsl(var(--turquoise-400))',
+  				500: 'hsl(var(--turquoise-500))',
+  				600: 'hsl(var(--turquoise-600))',
+  				700: 'hsl(var(--turquoise-700))',
+  				800: 'hsl(var(--turquoise-800))',
+  				900: 'hsl(var(--turquoise-900))',
+  				950: 'hsl(var(--turquoise-950))',
   			}
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		animation: {
+  			'float': 'float 3s ease-in-out infinite',
+  			'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+  			'gradient': 'gradient-shift 3s ease infinite',
+  			'spin-slow': 'spin 3s linear infinite',
+  		},
+  		backgroundImage: {
+  			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+  			'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate"),require('tailwind-scrollbar-hide')
-	
-  ],
+  plugins: [require("tailwindcss-animate"), require('tailwind-scrollbar-hide')],
 };
