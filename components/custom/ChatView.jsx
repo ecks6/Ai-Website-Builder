@@ -16,6 +16,7 @@ function ChatView() {
     const { messages, setMessages } = useContext(MessagesContext);
     const [userInput, setUserInput] = useState();
     const [loading, setLoading] = useState(false);
+    const [selectedEnv, setSelectedEnv] = useState('React');
     const UpdateMessages = useMutation(api.workspace.UpdateWorkspace);
 
     useEffect(() => {
@@ -27,6 +28,7 @@ function ChatView() {
             workspaceId: id
         });
         setMessages(result?.messages);
+        setSelectedEnv(result?.selectedEnv || 'React');
     }
 
     useEffect(() => {
@@ -40,9 +42,12 @@ function ChatView() {
 
     const GetAiResponse = async () => {
         setLoading(true);
-        const PROMPT = JSON.stringify(messages) + Prompt.CHAT_PROMPT;
+        const chatPrompt = Prompt.getPrompt('CHAT_PROMPT', selectedEnv);
+        const PROMPT = JSON.stringify(messages) + " " + chatPrompt;
+        
         const result = await axios.post('/api/ai-chat', {
-            prompt: PROMPT
+            prompt: PROMPT,
+            selectedEnv: selectedEnv
         });
 
         const aiResp = {
@@ -76,8 +81,13 @@ function ChatView() {
                     </div>
                     <h2 className="text-turquoise-300 font-semibold">AI Assistant</h2>
                     <div className="flex-1"></div>
-                    <div className="text-xs text-slate-400 bg-slate-800/50 px-3 py-1 rounded-full">
-                        {messages?.length || 0} messages
+                    <div className="flex items-center space-x-2">
+                        <div className="text-xs text-slate-400 bg-slate-800/50 px-3 py-1 rounded-full">
+                            {selectedEnv} Environment
+                        </div>
+                        <div className="text-xs text-slate-400 bg-slate-800/50 px-3 py-1 rounded-full">
+                            {messages?.length || 0} messages
+                        </div>
                     </div>
                 </div>
             </div>
@@ -150,7 +160,7 @@ function ChatView() {
                     <div className="flex gap-4">
                         <div className="flex-1 relative group">
                             <textarea
-                                placeholder="Ask me anything about your project..."
+                                placeholder={`Ask me anything about your ${selectedEnv} project...`}
                                 value={userInput}
                                 onChange={(event) => setUserInput(event.target.value)}
                                 className="w-full bg-slate-800/50 border-2 border-turquoise-500/20 rounded-xl p-4 pr-12 text-slate-100 placeholder-turquoise-300/50 focus:ring-0 focus:border-turquoise-500 outline-none transition-all duration-300 resize-none h-20 hover:border-turquoise-500/40"
@@ -181,7 +191,7 @@ function ChatView() {
                             <span>Press Enter to send, Shift+Enter for new line</span>
                         </div>
                         <div className="text-xs text-slate-500">
-                            Powered by AI
+                            Powered by AI • {selectedEnv} Mode
                         </div>
                     </div>
                 </div>

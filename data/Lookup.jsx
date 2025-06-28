@@ -12,7 +12,7 @@ export default {
     "Create a Music Streaming Service"
   ],
 
-    DEFAULT_FILE: {
+    DEFAULT_FILE_REACT: {
         '/public/index.html':
         {
             code: `<!DOCTYPE html>
@@ -20,7 +20,7 @@ export default {
             <head>
               <meta charset="UTF-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Document</title>
+              <title>React App</title>
               <script src="https://cdn.tailwindcss.com"></script>
             </head>
             <body>
@@ -56,8 +56,205 @@ const config = {
 export default config;
 `
 }
+    },
 
+    DEFAULT_FILE_HTML: {
+        '/index.html': {
+            code: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Project</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>My Website</h1>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h2>Welcome to My Website</h2>
+            <p>This is a modern HTML project</p>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 My Website</p>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>`
         },
+        '/style.css': {
+            code: `/* Modern CSS Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* CSS Custom Properties */
+:root {
+    --primary-color: #3b82f6;
+    --secondary-color: #1e40af;
+    --text-color: #1f2937;
+    --bg-color: #ffffff;
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+}
+
+/* Header Styles */
+header {
+    background: var(--primary-color);
+    color: white;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+nav h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Main Content */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.hero {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.hero h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: #6b7280;
+}
+
+/* Footer */
+footer {
+    background: #f9fafb;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav {
+        padding: 0 1rem;
+    }
+    
+    main {
+        padding: 1rem;
+    }
+    
+    .hero h2 {
+        font-size: 2rem;
+    }
+}`
+        },
+        '/script.js': {
+            code: `// Modern JavaScript for interactivity
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Website loaded successfully!');
+    
+    // Add smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    // Add interactive elements
+    const hero = document.querySelector('.hero');
+    if (hero) {
+        hero.addEventListener('click', function() {
+            this.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 200);
+        });
+    }
+});
+
+// Utility functions
+const utils = {
+    // Debounce function for performance
+    debounce: function(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    },
+    
+    // Simple animation helper
+    animate: function(element, property, from, to, duration = 300) {
+        const start = performance.now();
+        const animate = (currentTime) => {
+            const elapsed = currentTime - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const value = from + (to - from) * progress;
+            element.style[property] = value + (property.includes('opacity') ? '' : 'px');
+            
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        };
+        requestAnimationFrame(animate);
+    }
+};`
+        }
+    },
+
+    // Helper function to get default files based on environment
+    getDefaultFiles: function(environment) {
+        return environment === 'HTML' ? this.DEFAULT_FILE_HTML : this.DEFAULT_FILE_REACT;
+    },
+
+    get DEFAULT_FILE() {
+        return this.DEFAULT_FILE_REACT; // Keep backward compatibility
+    },
 
     DEPENDANCY: {
             "@google/generative-ai": "^0.21.0",

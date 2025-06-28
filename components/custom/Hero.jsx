@@ -1,7 +1,7 @@
 "use client"
 import Lookup from '@/data/Lookup';
 import { MessagesContext } from '@/context/MessagesContext';
-import { ArrowRight, Sparkles, Send, Wand2, Loader2, Zap, Code2, Rocket } from 'lucide-react';
+import { ArrowRight, Sparkles, Send, Wand2, Loader2, Zap, Code2, Rocket, Globe, Monitor } from 'lucide-react';
 import React, { useContext, useState } from 'react';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 
 function Hero() {
     const [userInput, setUserInput] = useState('');
+    const [selectedEnv, setSelectedEnv] = useState('React');
     const [isEnhancing, setIsEnhancing] = useState(false);
     const { messages, setMessages } = useContext(MessagesContext);
     const CreateWorkspace = useMutation(api.workspace.CreateWorkspace);
@@ -21,7 +22,8 @@ function Hero() {
         }
         setMessages(msg);
         const workspaceID = await CreateWorkspace({
-            messages: [msg]
+            messages: [msg],
+            selectedEnv: selectedEnv
         });
         router.push('/workspace/' + workspaceID);
     }
@@ -36,7 +38,10 @@ function Hero() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ prompt: userInput }),
+                body: JSON.stringify({ 
+                    prompt: userInput,
+                    selectedEnv: selectedEnv 
+                }),
             });
 
             const data = await response.json();
@@ -53,6 +58,25 @@ function Hero() {
     const onSuggestionClick = (suggestion) => {
         setUserInput(suggestion);
     };
+
+    const environments = [
+        {
+            id: 'React',
+            name: 'React',
+            icon: Code2,
+            description: 'Modern React with hooks, components, and state management',
+            color: 'from-blue-500 to-cyan-500',
+            features: ['Components', 'Hooks', 'State Management', 'Modern UI']
+        },
+        {
+            id: 'HTML',
+            name: 'HTML/CSS/JS',
+            icon: Globe,
+            description: 'Vanilla HTML, CSS3, and modern JavaScript',
+            color: 'from-orange-500 to-red-500',
+            features: ['Semantic HTML', 'CSS3', 'Vanilla JS', 'Responsive']
+        }
+    ];
 
     return (
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
@@ -115,6 +139,59 @@ function Hero() {
                         </div>
                     </div>
 
+                    {/* Environment Selection */}
+                    <div className="w-full max-w-4xl">
+                        <div className="text-center mb-8">
+                            <h3 className="text-2xl font-bold text-turquoise-400 mb-2">Choose Your Development Environment</h3>
+                            <p className="text-slate-400">Select the technology stack for your project</p>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            {environments.map((env) => (
+                                <button
+                                    key={env.id}
+                                    onClick={() => setSelectedEnv(env.id)}
+                                    className={`group relative p-6 rounded-2xl border-2 transition-all duration-300 hover-lift ${
+                                        selectedEnv === env.id
+                                            ? 'border-turquoise-500 bg-turquoise-500/10 neon-turquoise'
+                                            : 'border-turquoise-500/20 glass-dark hover:border-turquoise-500/40'
+                                    }`}
+                                >
+                                    {/* Selection indicator */}
+                                    {selectedEnv === env.id && (
+                                        <div className="absolute top-4 right-4 w-6 h-6 bg-turquoise-500 rounded-full flex items-center justify-center">
+                                            <div className="w-3 h-3 bg-white rounded-full"></div>
+                                        </div>
+                                    )}
+                                    
+                                    {/* Content */}
+                                    <div className="text-left">
+                                        <div className="flex items-center space-x-4 mb-4">
+                                            <div className={`p-3 rounded-xl bg-gradient-to-r ${env.color}`}>
+                                                <env.icon className="h-6 w-6 text-white" />
+                                            </div>
+                                            <div>
+                                                <h4 className="text-xl font-bold text-white">{env.name}</h4>
+                                                <p className="text-slate-400 text-sm">{env.description}</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex flex-wrap gap-2">
+                                            {env.features.map((feature, index) => (
+                                                <span
+                                                    key={index}
+                                                    className="px-3 py-1 bg-slate-800/50 text-slate-300 text-xs rounded-full border border-slate-700"
+                                                >
+                                                    {feature}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
                     {/* Enhanced Input Section */}
                     <div className="w-full max-w-4xl">
                         <div className="relative group">
@@ -131,6 +208,11 @@ function Hero() {
                                             <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                                         </div>
                                         <span className="text-turquoise-300 text-sm font-mono">AI_PROMPT_TERMINAL</span>
+                                        <div className="flex-1"></div>
+                                        <div className="flex items-center space-x-2 bg-slate-800/50 px-3 py-1 rounded-full">
+                                            <Monitor className="h-4 w-4 text-turquoise-400" />
+                                            <span className="text-xs text-turquoise-300">{selectedEnv}</span>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -139,7 +221,7 @@ function Hero() {
                                     <div className="flex gap-4">
                                         <div className="flex-1">
                                             <textarea
-                                                placeholder="Describe your vision... (e.g., 'Create a modern e-commerce dashboard with dark theme')"
+                                                placeholder={`Describe your ${selectedEnv} project... (e.g., 'Create a modern e-commerce dashboard with dark theme')`}
                                                 value={userInput}
                                                 onChange={(e) => setUserInput(e.target.value)}
                                                 className="w-full bg-transparent border-2 border-turquoise-500/20 rounded-xl p-6 text-slate-100 placeholder-turquoise-300/50 focus:border-turquoise-500 focus:ring-0 outline-none font-mono text-lg h-40 resize-none transition-all duration-300 hover:border-turquoise-500/40"
@@ -187,7 +269,7 @@ function Hero() {
                     <div className="w-full max-w-7xl">
                         <div className="text-center mb-8">
                             <h3 className="text-2xl font-bold text-turquoise-400 mb-2">Quick Start Templates</h3>
-                            <p className="text-slate-400">Click any suggestion to get started instantly</p>
+                            <p className="text-slate-400">Click any suggestion to get started instantly with {selectedEnv}</p>
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -209,6 +291,9 @@ function Hero() {
                                         <span className="text-slate-300 group-hover:text-turquoise-300 font-medium text-sm leading-relaxed transition-colors duration-300">
                                             {suggestion}
                                         </span>
+                                        <div className="mt-2 text-xs text-slate-500">
+                                            for {selectedEnv}
+                                        </div>
                                     </div>
                                 </button>
                             ))}
