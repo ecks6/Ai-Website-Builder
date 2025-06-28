@@ -167,6 +167,55 @@ function CodeView() {
     const envInfo = getEnvironmentInfo();
     const EnvIcon = envInfo.icon;
 
+    // Get Sandpack template and setup based on environment
+    const getSandpackConfig = () => {
+        if (environment === 'html') {
+            return {
+                template: 'vanilla',
+                customSetup: {
+                    dependencies: {},
+                    entry: '/index.html'
+                },
+                options: {
+                    externalResources: ['https://cdn.tailwindcss.com'],
+                    bundlerTimeoutSecs: 120,
+                    recompileMode: "immediate",
+                    recompileDelay: 300,
+                    showNavigator: true,
+                    showTabs: true,
+                    showLineNumbers: true,
+                    showInlineErrors: true,
+                    wrapContent: true,
+                    editorHeight: 'calc(85vh - 80px)'
+                }
+            };
+        }
+        
+        return {
+            template: 'react',
+            customSetup: {
+                dependencies: {
+                    ...Lookup.getDependencies(environment)
+                },
+                entry: '/index.js'
+            },
+            options: {
+                externalResources: ['https://cdn.tailwindcss.com'],
+                bundlerTimeoutSecs: 120,
+                recompileMode: "immediate",
+                recompileDelay: 300,
+                showNavigator: true,
+                showTabs: true,
+                showLineNumbers: true,
+                showInlineErrors: true,
+                wrapContent: true,
+                editorHeight: 'calc(85vh - 80px)'
+            }
+        };
+    };
+
+    const sandpackConfig = getSandpackConfig();
+
     return (
         <div className='relative h-[85vh] flex flex-col'>
             {/* Compact Header */}
@@ -226,146 +275,83 @@ function CodeView() {
                 </div>
             </div>
 
-            {/* Code Environment */}
+            {/* Code Environment - Using Sandpack for both React and HTML */}
             <div className="relative flex-1 overflow-hidden">
-                {environment === 'react' ? (
-                    <SandpackProvider 
-                        files={files}
-                        template="react" 
-                        theme={{
-                            colors: {
-                                surface1: '#0f172a',
-                                surface2: '#1e293b',
-                                surface3: '#334155',
-                                clickable: '#14b8a6',
-                                base: '#e2e8f0',
-                                disabled: '#64748b',
-                                hover: '#06b6d4',
-                                accent: '#14b8a6',
-                                error: '#ef4444',
-                                errorSurface: '#7f1d1d',
-                                warning: '#f59e0b',
-                                warningSurface: '#78350f'
-                            },
-                            syntax: {
-                                plain: '#e2e8f0',
-                                comment: '#64748b',
-                                keyword: '#14b8a6',
-                                tag: '#06b6d4',
-                                punctuation: '#94a3b8',
-                                definition: '#f472b6',
-                                property: '#fbbf24',
-                                static: '#8b5cf6',
-                                string: '#10b981'
-                            },
-                            font: {
-                                body: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-                                mono: '"Fira Code", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace',
-                                size: '14px',
-                                lineHeight: '1.6'
-                            }
-                        }}
-                        customSetup={{
-                            dependencies: {
-                                ...Lookup.getDependencies(environment)
-                            },
-                            entry: '/index.js'
-                        }}
-                        options={{
-                            externalResources: ['https://cdn.tailwindcss.com'],
-                            bundlerTimeoutSecs: 120,
-                            recompileMode: "immediate",
-                            recompileDelay: 300,
-                            showNavigator: true,
-                            showTabs: true,
-                            showLineNumbers: true,
-                            showInlineErrors: true,
-                            wrapContent: true,
-                            editorHeight: 'calc(85vh - 80px)'
-                        }}
-                    >
-                        <div className="border-2 border-turquoise-500/20 border-t-0 rounded-b-2xl overflow-hidden h-full">
-                            <SandpackLayout>
-                                {activeTab === 'code' ? (
-                                    <>
-                                        <SandpackFileExplorer 
-                                            style={{ 
-                                                height: 'calc(85vh - 80px)',
-                                                background: '#0f172a',
-                                                borderRight: '1px solid rgba(20, 184, 166, 0.2)'
-                                            }} 
-                                        />
-                                        <SandpackCodeEditor 
-                                            style={{ 
-                                                height: 'calc(85vh - 80px)',
-                                                background: '#0f172a'
-                                            }}
-                                            showTabs
-                                            showLineNumbers
-                                            showInlineErrors
-                                            wrapContent 
-                                        />
-                                    </>
-                                ) : (
-                                    <SandpackPreview 
+                <SandpackProvider 
+                    files={files}
+                    template={sandpackConfig.template}
+                    theme={{
+                        colors: {
+                            surface1: '#0f172a',
+                            surface2: '#1e293b',
+                            surface3: '#334155',
+                            clickable: '#14b8a6',
+                            base: '#e2e8f0',
+                            disabled: '#64748b',
+                            hover: '#06b6d4',
+                            accent: '#14b8a6',
+                            error: '#ef4444',
+                            errorSurface: '#7f1d1d',
+                            warning: '#f59e0b',
+                            warningSurface: '#78350f'
+                        },
+                        syntax: {
+                            plain: '#e2e8f0',
+                            comment: '#64748b',
+                            keyword: '#14b8a6',
+                            tag: '#06b6d4',
+                            punctuation: '#94a3b8',
+                            definition: '#f472b6',
+                            property: '#fbbf24',
+                            static: '#8b5cf6',
+                            string: '#10b981'
+                        },
+                        font: {
+                            body: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+                            mono: '"Fira Code", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace',
+                            size: '14px',
+                            lineHeight: '1.6'
+                        }
+                    }}
+                    customSetup={sandpackConfig.customSetup}
+                    options={sandpackConfig.options}
+                >
+                    <div className="border-2 border-turquoise-500/20 border-t-0 rounded-b-2xl overflow-hidden h-full">
+                        <SandpackLayout>
+                            {activeTab === 'code' ? (
+                                <>
+                                    <SandpackFileExplorer 
+                                        style={{ 
+                                            height: 'calc(85vh - 80px)',
+                                            background: '#0f172a',
+                                            borderRight: '1px solid rgba(20, 184, 166, 0.2)'
+                                        }} 
+                                    />
+                                    <SandpackCodeEditor 
                                         style={{ 
                                             height: 'calc(85vh - 80px)',
                                             background: '#0f172a'
-                                        }} 
-                                        showNavigator={true}
-                                        showOpenInCodeSandbox={false}
-                                        showRefreshButton={true}
+                                        }}
+                                        showTabs
+                                        showLineNumbers
+                                        showInlineErrors
+                                        wrapContent 
                                     />
-                                )}
-                            </SandpackLayout>
-                        </div>
-                    </SandpackProvider>
-                ) : (
-                    // HTML Environment - Simple code editor
-                    <div className="border-2 border-turquoise-500/20 border-t-0 rounded-b-2xl overflow-hidden h-full bg-slate-900">
-                        <div className="h-full flex">
-                            {activeTab === 'code' ? (
-                                <div className="w-full h-full flex">
-                                    {/* File Explorer */}
-                                    <div className="w-1/4 bg-slate-800 border-r border-turquoise-500/20 p-4">
-                                        <h3 className="text-turquoise-400 font-semibold mb-4 text-sm">Files</h3>
-                                        <div className="space-y-2">
-                                            {Object.keys(files).map((filename) => (
-                                                <div key={filename} className="text-slate-300 text-sm p-2 hover:bg-slate-700/50 rounded cursor-pointer">
-                                                    {filename}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    
-                                    {/* Code Editor */}
-                                    <div className="flex-1 p-4">
-                                        <div className="text-slate-300 font-mono text-sm">
-                                            <div className="mb-4 text-turquoise-400">HTML/CSS/JS Project Structure:</div>
-                                            {Object.entries(files).map(([filename, content]) => (
-                                                <div key={filename} className="mb-6">
-                                                    <div className="text-turquoise-300 font-semibold mb-2">{filename}</div>
-                                                    <pre className="bg-slate-800/50 p-4 rounded-lg overflow-auto text-xs">
-                                                        <code>{content.code || content}</code>
-                                                    </pre>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
+                                </>
                             ) : (
-                                // Preview for HTML
-                                <div className="w-full h-full">
-                                    <iframe
-                                        srcDoc={files['/index.html']?.code || ''}
-                                        className="w-full h-full border-0"
-                                        title="HTML Preview"
-                                    />
-                                </div>
+                                <SandpackPreview 
+                                    style={{ 
+                                        height: 'calc(85vh - 80px)',
+                                        background: '#0f172a'
+                                    }} 
+                                    showNavigator={true}
+                                    showOpenInCodeSandbox={false}
+                                    showRefreshButton={true}
+                                />
                             )}
-                        </div>
+                        </SandpackLayout>
                     </div>
-                )}
+                </SandpackProvider>
 
                 {/* Loading Overlay */}
                 {loading && (
