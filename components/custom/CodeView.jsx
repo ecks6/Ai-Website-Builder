@@ -132,9 +132,9 @@ function CodeView() {
     };
 
     return (
-        <div className='relative'>
+        <div className='h-full flex flex-col'>
             {/* Enhanced Header */}
-            <div className='glass-dark border-2 border-turquoise-500/20 rounded-t-2xl p-4'>
+            <div className='glass-dark border-2 border-turquoise-500/20 rounded-t-2xl p-4 flex-shrink-0'>
                 <div className='flex items-center justify-between'>
                     {/* Tab Switcher */}
                     <div className='flex items-center bg-slate-800/50 p-1 rounded-xl border border-turquoise-500/20'>
@@ -184,8 +184,8 @@ function CodeView() {
                 </div>
             </div>
 
-            {/* Code Environment */}
-            <div className="relative">
+            {/* Code Environment - Flexible height */}
+            <div className="flex-1 relative">
                 <SandpackProvider 
                     files={files}
                     template="react" 
@@ -238,23 +238,23 @@ function CodeView() {
                         showLineNumbers: true,
                         showInlineErrors: true,
                         wrapContent: true,
-                        editorHeight: '80vh'
+                        editorHeight: 'auto'
                     }}
                 >
-                    <div className="border-2 border-turquoise-500/20 border-t-0 rounded-b-2xl overflow-hidden">
+                    <div className="border-2 border-turquoise-500/20 border-t-0 rounded-b-2xl overflow-hidden h-full">
                         <SandpackLayout>
                             {activeTab === 'code' ? (
                                 <>
                                     <SandpackFileExplorer 
                                         style={{ 
-                                            height: '80vh',
+                                            height: '100%',
                                             background: '#0f172a',
                                             borderRight: '1px solid rgba(20, 184, 166, 0.2)'
                                         }} 
                                     />
                                     <SandpackCodeEditor 
                                         style={{ 
-                                            height: '80vh',
+                                            height: '100%',
                                             background: '#0f172a'
                                         }}
                                         showTabs
@@ -266,7 +266,7 @@ function CodeView() {
                             ) : (
                                 <SandpackPreview 
                                     style={{ 
-                                        height: '80vh',
+                                        height: '100%',
                                         background: '#0f172a'
                                     }} 
                                     showNavigator={true}

@@ -18,14 +18,14 @@ const Workspace = () => {
 
             {/* Content */}
             <div className='relative z-10 p-8'>
-                <div className='grid grid-cols-1 lg:grid-cols-4 gap-8 h-[calc(100vh-8rem)]'>
-                    {/* Chat Panel */}
-                    <div className='lg:col-span-1'>
+                <div className='grid grid-cols-1 lg:grid-cols-4 gap-8'>
+                    {/* Chat Panel - Fixed height to match code panel */}
+                    <div className='lg:col-span-1 h-[calc(100vh-4rem)]'>
                         <ChatView />
                     </div>
                     
-                    {/* Code Panel */}
-                    <div className='lg:col-span-3'>
+                    {/* Code Panel - Fixed height */}
+                    <div className='lg:col-span-3 h-[calc(100vh-4rem)]'>
                         <CodeView />
                     </div>
                 </div>
