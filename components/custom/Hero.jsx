@@ -137,38 +137,35 @@ function Hero() {
                         </div>
                     </div>
 
-                    {/* Optimized Templates Section */}
+                    {/* Subtle Templates Section */}
                     <div className="w-full max-w-5xl">
-                        <div className="text-center mb-12">
-                            <div className="inline-flex items-center space-x-2 bg-turquoise-500/10 rounded-full px-6 py-3 mb-4 border border-turquoise-500/30">
-                                <Sparkles className="h-5 w-5 text-turquoise-400" />
-                                <span className="text-turquoise-400 font-semibold">Quick Start</span>
+                        <div className="text-center mb-10">
+                            <div className="inline-flex items-center space-x-2 bg-slate-800/30 rounded-full px-4 py-2 mb-4 border border-slate-700/50">
+                                <Sparkles className="h-4 w-4 text-turquoise-400/70" />
+                                <span className="text-slate-300 text-sm font-medium">Quick Start</span>
                             </div>
-                            <h3 className="text-3xl font-bold text-white mb-3">Choose a Template</h3>
-                            <p className="text-slate-400 text-lg">Start with a pre-built template and customize it to your needs</p>
+                            <h3 className="text-2xl font-semibold text-slate-200 mb-2">Choose a Template</h3>
+                            <p className="text-slate-400">Start with a pre-built template</p>
                         </div>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {Lookup?.SUGGSTIONS.map((suggestion, index) => (
                                 <button
                                     key={index}
                                     onClick={() => onSuggestionClick(suggestion)}
-                                    className="group relative p-8 glass-dark hover:bg-slate-800/60 border-2 border-turquoise-500/20 rounded-2xl text-left transition-all duration-300 hover:border-turquoise-500/50 hover-lift"
+                                    className="group relative p-6 bg-slate-900/40 hover:bg-slate-800/50 border border-slate-700/30 hover:border-slate-600/50 rounded-xl text-left transition-all duration-200"
                                 >
-                                    {/* Hover glow */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-turquoise-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
-                                    
                                     {/* Content */}
                                     <div className="relative z-10">
-                                        <div className="flex items-start justify-between mb-4">
-                                            <div className="w-3 h-3 bg-turquoise-400 rounded-full animate-pulse"></div>
-                                            <ArrowRight className="h-5 w-5 text-turquoise-400/60 group-hover:text-turquoise-400 group-hover:translate-x-1 transition-all duration-300" />
+                                        <div className="flex items-start justify-between mb-3">
+                                            <div className="w-2 h-2 bg-turquoise-400/60 rounded-full"></div>
+                                            <ArrowRight className="h-4 w-4 text-slate-500 group-hover:text-turquoise-400/70 group-hover:translate-x-0.5 transition-all duration-200" />
                                         </div>
-                                        <h4 className="text-white group-hover:text-turquoise-300 font-semibold text-lg mb-2 transition-colors duration-300">
+                                        <h4 className="text-slate-200 group-hover:text-slate-100 font-medium text-base mb-1 transition-colors duration-200">
                                             {suggestion}
                                         </h4>
-                                        <p className="text-slate-400 text-sm group-hover:text-slate-300 transition-colors duration-300">
-                                            Click to start building
+                                        <p className="text-slate-500 text-xs group-hover:text-slate-400 transition-colors duration-200">
+                                            Click to start
                                         </p>
                                     </div>
                                 </button>
