@@ -86,49 +86,105 @@ const EnhancePromptConfig = {
     responseMimeType: "text/plain",
 };
 
-// OpenRouter API client
+// OpenRouter API client with improved error handling and retry logic
 class OpenRouterClient {
     constructor(apiKey) {
         this.apiKey = apiKey;
         this.baseURL = OPENROUTER_BASE_URL;
     }
 
-    async sendMessage(model, messages, config = {}) {
+    async sendMessage(model, messages, config = {}, retries = 2) {
         if (!this.apiKey) {
-            throw new Error('OpenRouter API key not configured');
+            throw new Error('OpenRouter API key not configured. Please add NEXT_PUBLIC_OPENROUTER_API_KEY to your environment variables.');
         }
 
-        const response = await fetch(`${this.baseURL}/chat/completions`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${this.apiKey}`,
-                'Content-Type': 'application/json',
-                'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-                'X-Title': 'AI Website Builder'
-            },
-            body: JSON.stringify({
-                model: model,
-                messages: Array.isArray(messages) ? messages : [{ role: 'user', content: messages }],
-                temperature: config.temperature || 0.7,
-                max_tokens: config.maxOutputTokens || 4096,
-                top_p: config.topP || 0.9,
-                frequency_penalty: 0,
-                presence_penalty: 0,
-                stream: false
-            })
-        });
-
-        if (!response.ok) {
-            const error = await response.text();
-            throw new Error(`OpenRouter API error: ${response.status} - ${error}`);
-        }
-
-        const data = await response.json();
-        return {
-            response: {
-                text: () => data.choices[0]?.message?.content || ''
-            }
+        const requestBody = {
+            model: model,
+            messages: Array.isArray(messages) ? messages : [{ role: 'user', content: messages }],
+            temperature: config.temperature || 0.7,
+            max_tokens: config.maxOutputTokens || 4096,
+            top_p: config.topP || 0.9,
+            frequency_penalty: 0,
+            presence_penalty: 0,
+            stream: false
         };
+
+        // Add response format for JSON requests
+        if (config.responseMimeType === "application/json") {
+            requestBody.response_format = { type: "json_object" };
+        }
+
+        for (let attempt = 0; attempt <= retries; attempt++) {
+            try {
+                const response = await fetch(`${this.baseURL}/chat/completions`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${this.apiKey}`,
+                        'Content-Type': 'application/json',
+                        'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+                        'X-Title': 'LanSoft Dev - AI Website Builder'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    let errorData;
+                    
+                    try {
+                        errorData = JSON.parse(errorText);
+                    } catch {
+                        errorData = { error: { message: errorText } };
+                    }
+
+                    // Handle rate limiting with exponential backoff
+                    if (response.status === 429 && attempt < retries) {
+                        const waitTime = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s...
+                        console.log(`Rate limited, retrying in ${waitTime}ms...`);
+                        await new Promise(resolve => setTimeout(resolve, waitTime));
+                        continue;
+                    }
+
+                    // Provide more specific error messages
+                    if (response.status === 429) {
+                        throw new Error(`Rate limit exceeded for model ${model}. Please try again later or use a different model.`);
+                    } else if (response.status === 401) {
+                        throw new Error('Invalid OpenRouter API key. Please check your NEXT_PUBLIC_OPENROUTER_API_KEY environment variable.');
+                    } else if (response.status === 402) {
+                        throw new Error('Insufficient credits for OpenRouter API. Please check your account balance.');
+                    } else {
+                        throw new Error(`OpenRouter API error (${response.status}): ${errorData.error?.message || errorText}`);
+                    }
+                }
+
+                const data = await response.json();
+                
+                if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+                    throw new Error('Invalid response format from OpenRouter API');
+                }
+
+                return {
+                    response: {
+                        text: () => data.choices[0].message.content || ''
+                    }
+                };
+
+            } catch (error) {
+                if (attempt === retries) {
+                    throw error;
+                }
+                
+                // Only retry on network errors or 5xx server errors
+                if (error.message.includes('fetch') || error.message.includes('network')) {
+                    const waitTime = Math.pow(2, attempt) * 1000;
+                    console.log(`Network error, retrying in ${waitTime}ms...`);
+                    await new Promise(resolve => setTimeout(resolve, waitTime));
+                    continue;
+                }
+                
+                throw error;
+            }
+        }
     }
 }
 
@@ -179,7 +235,15 @@ class AISession {
             }
         } catch (error) {
             console.error(`Error with ${this.modelId}:`, error);
-            throw error;
+            
+            // Provide user-friendly error messages
+            if (error.message.includes('Rate limit')) {
+                throw new Error(`The ${this.modelConfig.name} model is currently rate-limited. Please try again in a few moments or select a different model.`);
+            } else if (error.message.includes('API key')) {
+                throw new Error(`API configuration issue with ${this.modelConfig.name}. Please check your API keys.`);
+            } else {
+                throw new Error(`Error with ${this.modelConfig.name}: ${error.message}`);
+            }
         }
     }
 }
@@ -208,4 +272,19 @@ export const getAvailableModels = () => {
 // Function to check if OpenRouter is configured
 export const isOpenRouterConfigured = () => {
     return !!OPENROUTER_API_KEY;
+};
+
+// Function to test OpenRouter connection
+export const testOpenRouterConnection = async () => {
+    if (!OPENROUTER_API_KEY) {
+        return { success: false, error: 'API key not configured' };
+    }
+
+    try {
+        const testClient = new OpenRouterClient(OPENROUTER_API_KEY);
+        await testClient.sendMessage('deepseek/deepseek-chat-v3-0324:free', 'Hello', { maxOutputTokens: 10 });
+        return { success: true };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
 };
