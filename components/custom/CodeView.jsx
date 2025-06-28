@@ -14,7 +14,7 @@ import Prompt from '@/data/Prompt';
 import { useConvex, useMutation } from 'convex/react';
 import { useParams } from 'next/navigation';
 import { api } from '@/convex/_generated/api';
-import { Loader2Icon, Download, Code, Eye, FileText, Zap } from 'lucide-react';
+import { Loader2Icon, Download, Code, Eye, FileText, Zap, Terminal, Play, Layers } from 'lucide-react';
 import JSZip from 'jszip';
 
 function CodeView() {
@@ -134,9 +134,9 @@ function CodeView() {
     return (
         <div className='relative'>
             {/* Enhanced Header */}
-            <div className='glass-dark border-2 border-turquoise-500/20 rounded-t-2xl p-4'>
+            <div className='glass-terminal border-2 border-turquoise-500/30 rounded-t-2xl p-4'>
                 <div className='flex items-center justify-between'>
-                    {/* Tab Switcher */}
+                    {/* Enhanced Tab Switcher */}
                     <div className='flex items-center bg-slate-800/50 p-1 rounded-xl border border-turquoise-500/20'>
                         <button
                             onClick={() => setActiveTab('code')}
@@ -148,6 +148,9 @@ function CodeView() {
                         >
                             <Code className="h-4 w-4" />
                             <span>Code Editor</span>
+                            {activeTab === 'code' && (
+                                <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                            )}
                         </button>
 
                         <button
@@ -160,31 +163,47 @@ function CodeView() {
                         >
                             <Eye className="h-4 w-4" />
                             <span>Live Preview</span>
+                            {activeTab === 'preview' && (
+                                <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                            )}
                         </button>
                     </div>
 
-                    {/* Action Buttons */}
+                    {/* Enhanced Action Buttons */}
                     <div className="flex items-center space-x-3">
-                        {/* File Count */}
-                        <div className="flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-lg border border-turquoise-500/20">
-                            <FileText className="h-4 w-4 text-turquoise-400" />
-                            <span className="text-sm text-slate-300">{Object.keys(files).length} files</span>
+                        {/* Project Info */}
+                        <div className="flex items-center space-x-3">
+                            <div className="flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-lg border border-turquoise-500/20">
+                                <Terminal className="h-4 w-4 text-turquoise-400" />
+                                <span className="text-sm text-slate-300 font-medium">React + Vite</span>
+                            </div>
+
+                            <div className="flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-lg border border-turquoise-500/20">
+                                <FileText className="h-4 w-4 text-turquoise-400" />
+                                <span className="text-sm text-slate-300">{Object.keys(files).length} files</span>
+                            </div>
+
+                            <div className="flex items-center space-x-2 bg-emerald-500/10 px-4 py-2 rounded-lg border border-emerald-500/30">
+                                <Play className="h-4 w-4 text-emerald-400" />
+                                <span className="text-sm text-emerald-400 font-medium">Live</span>
+                            </div>
                         </div>
 
-                        {/* Download Button */}
+                        {/* Enhanced Download Button */}
                         <button
                             onClick={downloadFiles}
                             className="group relative flex items-center gap-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover-lift"
                         >
                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-xl blur opacity-0 group-hover:opacity-50 transition duration-300"></div>
-                            <Download className="h-5 w-5 relative z-10" />
+                            <Download className="h-5 w-5 relative z-10 group-hover:scale-110 transition-transform" />
                             <span className="relative z-10">Export Project</span>
+                            <div className="w-2 h-2 bg-white/50 rounded-full animate-pulse relative z-10"></div>
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* Code Environment */}
+            {/* Enhanced Code Environment */}
             <div className="relative">
                 <SandpackProvider 
                     files={files}
@@ -241,7 +260,7 @@ function CodeView() {
                         editorHeight: '80vh'
                     }}
                 >
-                    <div className="border-2 border-turquoise-500/20 border-t-0 rounded-b-2xl overflow-hidden">
+                    <div className="border-2 border-turquoise-500/30 border-t-0 rounded-b-2xl overflow-hidden terminal-glow">
                         <SandpackLayout>
                             {activeTab === 'code' ? (
                                 <>
@@ -278,24 +297,47 @@ function CodeView() {
                     </div>
                 </SandpackProvider>
 
-                {/* Loading Overlay */}
+                {/* Enhanced Loading Overlay */}
                 {loading && (
-                    <div className='absolute inset-0 glass-dark rounded-2xl flex items-center justify-center z-50'>
-                        <div className="text-center space-y-6">
+                    <div className='absolute inset-0 glass-terminal rounded-2xl flex items-center justify-center z-50'>
+                        <div className="text-center space-y-8">
                             <div className="relative">
-                                <div className="w-20 h-20 border-4 border-turquoise-500/20 rounded-full"></div>
-                                <div className="absolute inset-0 w-20 h-20 border-4 border-turquoise-500 rounded-full border-t-transparent animate-spin"></div>
+                                <div className="w-24 h-24 border-4 border-turquoise-500/20 rounded-full"></div>
+                                <div className="absolute inset-0 w-24 h-24 border-4 border-turquoise-500 rounded-full border-t-transparent animate-spin"></div>
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <Zap className="h-8 w-8 text-turquoise-400 animate-pulse" />
+                                    <Zap className="h-10 w-10 text-turquoise-400 animate-pulse" />
                                 </div>
                             </div>
-                            <div className="space-y-2">
-                                <h3 className="text-xl font-bold text-turquoise-400">Generating Code</h3>
-                                <p className="text-slate-400">AI is crafting your project...</p>
-                                <div className="flex justify-center space-x-1">
-                                    <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-bounce"></div>
-                                    <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                                    <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                            
+                            <div className="space-y-4">
+                                <h3 className="text-2xl font-bold text-turquoise-400 neon-text">
+                                    Generating Code
+                                </h3>
+                                <p className="text-slate-400 max-w-md mx-auto">
+                                    AI is crafting your React components with modern patterns and best practices...
+                                </p>
+                                
+                                {/* Enhanced loading dots */}
+                                <div className="flex justify-center space-x-2">
+                                    <div className="w-3 h-3 bg-turquoise-400 rounded-full animate-bounce"></div>
+                                    <div className="w-3 h-3 bg-turquoise-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                                    <div className="w-3 h-3 bg-turquoise-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                                </div>
+                                
+                                {/* Progress indicators */}
+                                <div className="flex items-center justify-center space-x-4 text-xs text-slate-500">
+                                    <div className="flex items-center gap-2">
+                                        <Layers className="h-3 w-3" />
+                                        <span>Components</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Code className="h-3 w-3" />
+                                        <span>Logic</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Eye className="h-3 w-3" />
+                                        <span>Styling</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
