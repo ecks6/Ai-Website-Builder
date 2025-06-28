@@ -102,6 +102,18 @@ body {
   100% { background-position: 0% 50%; }
 }
 
+/* Breathing animation - slow and natural like breathing */
+@keyframes breathe {
+  0%, 100% { 
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
@@ -113,6 +125,10 @@ body {
 .animate-gradient {
   background-size: 200% 200%;
   animation: gradient-shift 3s ease infinite;
+}
+
+.animate-breathe {
+  animation: breathe 4s ease-in-out infinite;
 }
 
 /* Glassmorphism effect */

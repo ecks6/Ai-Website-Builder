@@ -10,13 +10,13 @@ function Header() {
                     {/* Logo and Title */}
                     <Link href="/" className="flex items-center space-x-4 group cursor-pointer">
                         <div className="relative">
-                            {/* Logo SVG with gentle pulse animation */}
+                            {/* Logo SVG with gentle breathing animation */}
                             <svg 
                                 xmlns="http://www.w3.org/2000/svg" 
                                 viewBox="0 0 16 16" 
                                 width="32" 
                                 height="32"
-                                className="animate-pulse transition-transform duration-300 group-hover:scale-110"
+                                className="animate-breathe transition-transform duration-300 group-hover:scale-110"
                             >
                                 {/* Blocurile colorate aranjate conform imaginii atașate */}
                                 {/* Rândul 1 (de jos) */}
