@@ -82,11 +82,14 @@ function Hero() {
         }
     ];
 
-    // Get suggestions based on environment
+    // Get suggestions based on environment with defensive check
     const getSuggestions = () => {
-        return selectedEnvironment === 'react' 
+        const suggestions = selectedEnvironment === 'react' 
             ? Lookup.SUGGSTIONS_REACT 
             : Lookup.SUGGSTIONS_HTML;
+        
+        // Return empty array if suggestions is undefined or not an array
+        return Array.isArray(suggestions) ? suggestions : [];
     };
 
     // Template icons mapping
