@@ -16,17 +16,24 @@ const Workspace = () => {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gradient-to-r from-turquoise-500/5 to-cyan-500/5 rounded-full blur-3xl"></div>
             </div>
 
-            {/* Content */}
-            <div className='relative z-10 p-4 md:p-6 lg:p-8'>
-                <div className='grid grid-cols-1 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8'>
-                    {/* Chat Panel */}
-                    <div className='lg:col-span-1 h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] lg:h-[calc(100vh-4rem)]'>
-                        <ChatView />
-                    </div>
-                    
-                    {/* Code Panel */}
-                    <div className='lg:col-span-3 h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] lg:h-[calc(100vh-4rem)]'>
-                        <CodeView />
+            {/* Content Container */}
+            <div className='relative z-10 h-screen flex flex-col'>
+                {/* Main Content Grid */}
+                <div className='flex-1 p-2 sm:p-4 md:p-6 lg:p-8'>
+                    <div className='h-full grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-4 md:gap-6 lg:gap-8'>
+                        {/* Chat Panel */}
+                        <div className='lg:col-span-4 xl:col-span-3 h-full'>
+                            <div className='h-full'>
+                                <ChatView />
+                            </div>
+                        </div>
+                        
+                        {/* Code Panel */}
+                        <div className='lg:col-span-8 xl:col-span-9 h-full'>
+                            <div className='h-full'>
+                                <CodeView />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
