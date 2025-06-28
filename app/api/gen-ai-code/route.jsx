@@ -4,6 +4,7 @@ import Prompt from '@/data/Prompt';
 
 export async function POST(req){
     const { prompt, environment = 'react', model = 'gemini-2.0-flash-exp' } = await req.json();
+    let result = null; // Initialize result variable to prevent ReferenceError
     
     try {
         // Create AI session with selected model
@@ -21,7 +22,7 @@ export async function POST(req){
         // Combine the environment-specific prompt with user input
         const fullPrompt = `${prompt}\n\n${codeGenPrompt}`;
         
-        const result = await aiSession.sendMessage(fullPrompt);
+        result = await aiSession.sendMessage(fullPrompt);
         const resp = result.response.text();
         
         // Extract JSON from the response
