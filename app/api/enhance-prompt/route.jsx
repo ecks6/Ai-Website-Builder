@@ -4,11 +4,15 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request) {
     try {
-        const { prompt } = await request.json();
+        const { prompt, selectedEnv = 'react' } = await request.json();
+        
+        // Get environment-specific prompt
+        const enhancePromptRules = Prompt.getPrompt('ENHANCE_PROMPT_RULES', selectedEnv);
         
         const result = await chatSession.sendMessage([
-            Prompt.ENHANCE_PROMPT_RULES,
-            `Original prompt: ${prompt}`
+            enhancePromptRules,
+            `Original prompt: ${prompt}`,
+            `Target environment: ${selectedEnv}`
         ]);
         
         const text = result.response.text();
@@ -22,4 +26,4 @@ export async function POST(request) {
             success: false 
         }, { status: 500 });
     }
-} 
+}
