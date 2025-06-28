@@ -10,25 +10,29 @@ function Header() {
                     {/* Logo and Title */}
                     <Link href="/" className="flex items-center space-x-4 group cursor-pointer">
                         <div className="relative">
-                            <div className="absolute inset-0 bg-gradient-to-r from-turquoise-400 to-cyan-400 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300 animate-pulse-glow"></div>
-                            <div className="relative bg-gradient-to-r from-turquoise-500 to-cyan-500 p-3 rounded-xl hover-lift">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24">
-                                    {/* Blocurile colorate aranjate conform imaginii atașate */}
-                                    {/* Rândul 1 (de jos) */}
-                                    <rect x="1.5" y="11" width="2.5" height="2.5" rx="0.5" fill="#E74C3C" />
-                                    {/* Rândul 2 */}
-                                    <rect x="1.5" y="7.5" width="2.5" height="2.5" rx="0.5" fill="#F1C40F" />
-                                    <rect x="5" y="7.5" width="2.5" height="2.5" rx="0.5" fill="#27AE60" />
-                                    {/* Rândul 3 */}
-                                    <rect x="1.5" y="4" width="2.5" height="2.5" rx="0.5" fill="#F39C12" />
-                                    <rect x="5" y="4" width="2.5" height="2.5" rx="0.5" fill="#2ECC71" />
-                                    <rect x="8.5" y="4" width="2.5" height="2.5" rx="0.5" fill="#3498DB" />
-                                    {/* Rândul 4 (de sus) */}
-                                    <rect x="5" y="0.5" width="2.5" height="2.5" rx="0.5" fill="#2ECC71" />
-                                    <rect x="8.5" y="0.5" width="2.5" height="2.5" rx="0.5" fill="#3498DB" />
-                                    <rect x="12" y="0.5" width="2.5" height="2.5" rx="0.5" fill="#3498DB" />
-                                </svg>
-                            </div>
+                            {/* Logo SVG with gentle pulse animation */}
+                            <svg 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                viewBox="0 0 16 16" 
+                                width="32" 
+                                height="32"
+                                className="animate-pulse transition-transform duration-300 group-hover:scale-110"
+                            >
+                                {/* Blocurile colorate aranjate conform imaginii atașate */}
+                                {/* Rândul 1 (de jos) */}
+                                <rect x="1.5" y="11" width="2.5" height="2.5" rx="0.5" fill="#E74C3C" />
+                                {/* Rândul 2 */}
+                                <rect x="1.5" y="7.5" width="2.5" height="2.5" rx="0.5" fill="#F1C40F" />
+                                <rect x="5" y="7.5" width="2.5" height="2.5" rx="0.5" fill="#27AE60" />
+                                {/* Rândul 3 */}
+                                <rect x="1.5" y="4" width="2.5" height="2.5" rx="0.5" fill="#F39C12" />
+                                <rect x="5" y="4" width="2.5" height="2.5" rx="0.5" fill="#2ECC71" />
+                                <rect x="8.5" y="4" width="2.5" height="2.5" rx="0.5" fill="#3498DB" />
+                                {/* Rândul 4 (de sus) */}
+                                <rect x="5" y="0.5" width="2.5" height="2.5" rx="0.5" fill="#2ECC71" />
+                                <rect x="8.5" y="0.5" width="2.5" height="2.5" rx="0.5" fill="#3498DB" />
+                                <rect x="12" y="0.5" width="2.5" height="2.5" rx="0.5" fill="#3498DB" />
+                            </svg>
                         </div>
                         <div className="flex flex-col">
                             <h1 className="text-2xl font-bold bg-gradient-to-r from-turquoise-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent animate-gradient">
