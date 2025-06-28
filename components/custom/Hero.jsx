@@ -1,7 +1,7 @@
 "use client"
 import Lookup from '@/data/Lookup';
 import { MessagesContext } from '@/context/MessagesContext';
-import { ArrowRight, Send, Wand2, Loader2, Zap, Code2, Palette, Sparkles } from 'lucide-react';
+import { ArrowRight, Send, Wand2, Loader2, Zap, Code2, Palette, Sparkles, Globe, Layers } from 'lucide-react';
 import React, { useContext, useState } from 'react';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -10,18 +10,40 @@ import { useRouter } from 'next/navigation';
 function Hero() {
     const [userInput, setUserInput] = useState('');
     const [isEnhancing, setIsEnhancing] = useState(false);
+    const [selectedEnvironment, setSelectedEnvironment] = useState('react');
     const { messages, setMessages } = useContext(MessagesContext);
     const CreateWorkspace = useMutation(api.workspace.CreateWorkspace);
     const router = useRouter();
 
+    const environments = [
+        {
+            id: 'react',
+            name: 'React',
+            icon: Code2,
+            description: 'Modern React with Vite',
+            color: 'from-blue-500 to-cyan-500',
+            borderColor: 'border-blue-500/30 hover:border-blue-500/60'
+        },
+        {
+            id: 'html',
+            name: 'HTML',
+            icon: Globe,
+            description: 'Pure HTML/CSS/JS',
+            color: 'from-orange-500 to-red-500',
+            borderColor: 'border-orange-500/30 hover:border-orange-500/60'
+        }
+    ];
+
     const onGenerate = async (input) => {
         const msg = {
             role: 'user',
-            content: input
+            content: input,
+            environment: selectedEnvironment
         }
         setMessages(msg);
         const workspaceID = await CreateWorkspace({
-            messages: [msg]
+            messages: [msg],
+            environment: selectedEnvironment
         });
         router.push('/workspace/' + workspaceID);
     }
@@ -36,7 +58,10 @@ function Hero() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ prompt: userInput }),
+                body: JSON.stringify({ 
+                    prompt: userInput,
+                    environment: selectedEnvironment 
+                }),
             });
 
             const data = await response.json();
@@ -64,6 +89,13 @@ function Hero() {
         'Design a Minimalistic Note-Taking App': Zap
     };
 
+    // Get suggestions based on environment
+    const getSuggestions = () => {
+        return selectedEnvironment === 'react' 
+            ? Lookup.SUGGSTIONS 
+            : Lookup.HTML_SUGGESTIONS;
+    };
+
     return (
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
             {/* Animated background */}
@@ -79,6 +111,72 @@ function Hero() {
 
             <div className="container mx-auto px-6 py-12 relative z-10">
                 <div className="flex flex-col items-center justify-center space-y-8">
+                    {/* Environment Selector */}
+                    <div className="w-full max-w-4xl">
+                        <div className="text-center mb-6">
+                            <div className="inline-flex items-center space-x-2 bg-slate-800/30 rounded-full px-4 py-2 mb-4 border border-slate-700/50">
+                                <Layers className="h-4 w-4 text-turquoise-400/70" />
+                                <span className="text-slate-300 text-sm font-medium">Development Environment</span>
+                            </div>
+                        </div>
+                        
+                        <div className="flex justify-center gap-4 mb-8">
+                            {environments.map((env) => {
+                                const IconComponent = env.icon;
+                                const isSelected = selectedEnvironment === env.id;
+                                
+                                return (
+                                    <button
+                                        key={env.id}
+                                        onClick={() => setSelectedEnvironment(env.id)}
+                                        className={`group relative p-6 rounded-2xl border-2 transition-all duration-300 hover-lift ${
+                                            isSelected 
+                                                ? `${env.borderColor} bg-gradient-to-r ${env.color} bg-opacity-10` 
+                                                : 'border-slate-700/30 bg-slate-900/30 hover:border-slate-600/50'
+                                        }`}
+                                    >
+                                        {/* Glow effect for selected */}
+                                        {isSelected && (
+                                            <div className={`absolute inset-0 bg-gradient-to-r ${env.color} opacity-20 rounded-2xl blur-xl`}></div>
+                                        )}
+                                        
+                                        <div className="relative z-10 flex flex-col items-center space-y-3">
+                                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                                                isSelected 
+                                                    ? `bg-gradient-to-r ${env.color}` 
+                                                    : 'bg-slate-800/50 group-hover:bg-slate-700/50'
+                                            } transition-all duration-300`}>
+                                                <IconComponent className={`h-6 w-6 ${
+                                                    isSelected ? 'text-white' : 'text-slate-400 group-hover:text-slate-300'
+                                                } transition-colors duration-300`} />
+                                            </div>
+                                            
+                                            <div className="text-center">
+                                                <h3 className={`font-semibold ${
+                                                    isSelected ? 'text-white' : 'text-slate-300 group-hover:text-slate-200'
+                                                } transition-colors duration-300`}>
+                                                    {env.name}
+                                                </h3>
+                                                <p className={`text-xs ${
+                                                    isSelected ? 'text-slate-300' : 'text-slate-500 group-hover:text-slate-400'
+                                                } transition-colors duration-300`}>
+                                                    {env.description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Selection indicator */}
+                                        {isSelected && (
+                                            <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-turquoise-500 to-cyan-500 rounded-full flex items-center justify-center">
+                                                <div className="w-2 h-2 bg-white rounded-full"></div>
+                                            </div>
+                                        )}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+
                     {/* Enhanced Input Section */}
                     <div className="w-full max-w-4xl">
                         <div className="relative group">
@@ -88,13 +186,27 @@ function Hero() {
                             <div className="relative glass-dark rounded-2xl border-2 border-turquoise-500/30 hover:border-turquoise-500/50 transition-all duration-300 overflow-hidden">
                                 {/* Header */}
                                 <div className="bg-gradient-to-r from-turquoise-500/10 to-cyan-500/10 p-4 border-b border-turquoise-500/20">
-                                    <div className="flex items-center space-x-3">
-                                        <div className="flex space-x-2">
-                                            <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                                            <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                                            <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center space-x-3">
+                                            <div className="flex space-x-2">
+                                                <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                                                <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                                                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                                            </div>
+                                            <span className="text-turquoise-300 text-sm font-mono">AI_PROMPT_TERMINAL</span>
                                         </div>
-                                        <span className="text-turquoise-300 text-sm font-mono">AI_PROMPT_TERMINAL</span>
+                                        
+                                        {/* Environment indicator */}
+                                        <div className="flex items-center space-x-2 bg-slate-800/50 px-3 py-1 rounded-full border border-slate-700/50">
+                                            {environments.find(env => env.id === selectedEnvironment)?.icon && 
+                                                React.createElement(environments.find(env => env.id === selectedEnvironment).icon, {
+                                                    className: "h-4 w-4 text-turquoise-400"
+                                                })
+                                            }
+                                            <span className="text-xs text-turquoise-300 font-medium">
+                                                {environments.find(env => env.id === selectedEnvironment)?.name}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -102,7 +214,7 @@ function Hero() {
                                 <div className="p-6">
                                     <div className="relative">
                                         <textarea
-                                            placeholder="Describe your vision... (e.g., 'Create a modern e-commerce dashboard with dark theme')"
+                                            placeholder={`Describe your ${selectedEnvironment === 'react' ? 'React' : 'HTML'} project... (e.g., 'Create a modern ${selectedEnvironment === 'react' ? 'dashboard with components' : 'landing page with animations'}')`}
                                             value={userInput}
                                             onChange={(e) => setUserInput(e.target.value)}
                                             className="w-full bg-transparent border-2 border-turquoise-500/20 rounded-xl p-6 pr-32 text-slate-100 placeholder-turquoise-300/50 focus:border-turquoise-500 focus:ring-0 outline-none font-mono text-lg h-32 resize-none transition-all duration-300 hover:border-turquoise-500/40"
@@ -170,10 +282,10 @@ function Hero() {
                         </div>
                     </div>
 
-                    {/* Compact Templates Section - No Headers */}
+                    {/* Compact Templates Section - Environment Specific */}
                     <div className="w-full max-w-5xl">
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                            {Lookup?.SUGGSTIONS.map((suggestion, index) => {
+                            {getSuggestions().map((suggestion, index) => {
                                 const IconComponent = templateIcons[suggestion] || Code2;
                                 return (
                                     <button

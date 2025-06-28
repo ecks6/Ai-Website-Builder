@@ -8,6 +8,15 @@ export default {
         "Design a Minimalistic Note-Taking App"
     ],
 
+    HTML_SUGGESTIONS: [
+        'Create a Modern Landing Page',
+        'Build a Portfolio Website',
+        'Design a Restaurant Menu Site',
+        'Create a Business Card Website',
+        'Build a Photo Gallery',
+        'Design a Contact Form Page'
+    ],
+
     DEFAULT_FILE_REACT: {
         '/public/index.html': {
             code: `<!DOCTYPE html>
