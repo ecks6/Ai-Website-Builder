@@ -1,7 +1,7 @@
 "use client"
 import Lookup from '@/data/Lookup';
 import { MessagesContext } from '@/context/MessagesContext';
-import { ArrowRight, Send, Wand2, Loader2, Sparkles } from 'lucide-react';
+import { ArrowRight, Send, Wand2, Loader2, Sparkles, Zap, Code2, Palette } from 'lucide-react';
 import React, { useContext, useState } from 'react';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -52,6 +52,16 @@ function Hero() {
 
     const onSuggestionClick = (suggestion) => {
         setUserInput(suggestion);
+    };
+
+    // Template icons mapping
+    const templateIcons = {
+        'Create Todo App': Code2,
+        'Create a Budget Track App': Zap,
+        'Create a Login and Signup page': Palette,
+        'Develop a Task Management App': Code2,
+        'Create a Fully Responsive Blog Platform': Palette,
+        'Design a Minimalistic Note-Taking App': Zap
     };
 
     return (
@@ -137,39 +147,66 @@ function Hero() {
                         </div>
                     </div>
 
-                    {/* Narrower Templates Section */}
-                    <div className="w-full max-w-3xl">
+                    {/* Redesigned Templates Section - Minimalist & Interactive */}
+                    <div className="w-full max-w-2xl">
                         <div className="text-center mb-8">
-                            <div className="inline-flex items-center space-x-2 bg-slate-800/30 rounded-full px-4 py-2 mb-4 border border-slate-700/50">
-                                <Sparkles className="h-4 w-4 text-turquoise-400/70" />
+                            <div className="inline-flex items-center space-x-2 bg-slate-800/20 rounded-full px-4 py-2 mb-4 border border-slate-700/30 backdrop-blur-sm">
+                                <Sparkles className="h-4 w-4 text-turquoise-400/70 animate-pulse" />
                                 <span className="text-slate-300 text-sm font-medium">Quick Start</span>
                             </div>
-                            <h3 className="text-xl font-semibold text-slate-200 mb-2">Choose a Template</h3>
+                            <h3 className="text-lg font-semibold text-slate-200 mb-2">Choose a Template</h3>
                             <p className="text-slate-400 text-sm">Start with a pre-built template</p>
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {Lookup?.SUGGSTIONS.map((suggestion, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => onSuggestionClick(suggestion)}
-                                    className="group relative p-5 bg-slate-900/40 hover:bg-slate-800/50 border border-slate-700/30 hover:border-slate-600/50 rounded-lg text-left transition-all duration-200"
-                                >
-                                    {/* Content */}
-                                    <div className="relative z-10">
-                                        <div className="flex items-start justify-between mb-2">
-                                            <div className="w-1.5 h-1.5 bg-turquoise-400/60 rounded-full"></div>
-                                            <ArrowRight className="h-3.5 w-3.5 text-slate-500 group-hover:text-turquoise-400/70 group-hover:translate-x-0.5 transition-all duration-200" />
+                            {Lookup?.SUGGSTIONS.map((suggestion, index) => {
+                                const IconComponent = templateIcons[suggestion] || Code2;
+                                return (
+                                    <button
+                                        key={index}
+                                        onClick={() => onSuggestionClick(suggestion)}
+                                        className="group relative p-4 bg-slate-900/30 hover:bg-slate-800/40 border border-slate-700/20 hover:border-turquoise-500/30 rounded-xl text-left transition-all duration-300 hover-lift overflow-hidden"
+                                    >
+                                        {/* Animated background gradient */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-turquoise-500/0 via-turquoise-500/5 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                        
+                                        {/* Content */}
+                                        <div className="relative z-10 flex items-center space-x-3">
+                                            {/* Icon */}
+                                            <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-turquoise-500/20 to-cyan-500/20 rounded-lg flex items-center justify-center group-hover:from-turquoise-500/30 group-hover:to-cyan-500/30 transition-all duration-300">
+                                                <IconComponent className="h-5 w-5 text-turquoise-400 group-hover:text-turquoise-300 transition-colors duration-300" />
+                                            </div>
+                                            
+                                            {/* Text */}
+                                            <div className="flex-1 min-w-0">
+                                                <h4 className="text-slate-200 group-hover:text-slate-100 font-medium text-sm transition-colors duration-300 leading-tight">
+                                                    {suggestion}
+                                                </h4>
+                                                <p className="text-slate-500 group-hover:text-slate-400 text-xs transition-colors duration-300 mt-1">
+                                                    Click to start building
+                                                </p>
+                                            </div>
+                                            
+                                            {/* Arrow */}
+                                            <div className="flex-shrink-0">
+                                                <ArrowRight className="h-4 w-4 text-slate-500 group-hover:text-turquoise-400 group-hover:translate-x-1 transition-all duration-300" />
+                                            </div>
                                         </div>
-                                        <h4 className="text-slate-200 group-hover:text-slate-100 font-medium text-sm mb-1 transition-colors duration-200 leading-tight">
-                                            {suggestion}
-                                        </h4>
-                                        <p className="text-slate-500 text-xs group-hover:text-slate-400 transition-colors duration-200">
-                                            Click to start
-                                        </p>
-                                    </div>
-                                </button>
-                            ))}
+                                        
+                                        {/* Animated border */}
+                                        <div className="absolute inset-0 rounded-xl border border-turquoise-500/0 group-hover:border-turquoise-500/20 transition-all duration-300"></div>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        
+                        {/* Bottom decoration */}
+                        <div className="flex justify-center mt-6">
+                            <div className="flex items-center space-x-2 text-xs text-slate-500">
+                                <div className="w-1 h-1 bg-turquoise-400/50 rounded-full animate-pulse"></div>
+                                <span>Powered by AI</span>
+                                <div className="w-1 h-1 bg-turquoise-400/50 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                            </div>
                         </div>
                     </div>
                 </div>
