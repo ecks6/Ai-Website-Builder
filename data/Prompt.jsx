@@ -1,8 +1,7 @@
 import dedent from 'dedent';
 
 export default {
-    // React Prompts
-    CHAT_PROMPT_REACT: dedent`
+    CHAT_PROMPT: dedent`
     'You are an AI Assistant and experienced in React Development.
     GUIDELINE:
     - Tell user what you are building
@@ -10,7 +9,7 @@ export default {
     - Skip code examples and commentary
     `,
 
-    CODE_GEN_PROMPT_REACT: dedent`
+    CODE_GEN_PROMPT: dedent`
     Generate a fully structured React project using Vite.  
 Ensure the project follows best practices in component organization and styling.  
 
@@ -94,118 +93,23 @@ Ensure the project follows best practices in component organization and styling.
     - Update the package.json file with the required dependencies.
     - Do not use backend or database related.
     `,
-
-    ENHANCE_PROMPT_RULES_REACT: dedent`
-    You are a prompt enhancement expert and React website designer. Your task is to improve the given user prompt by:
-    1. Making it more specific and detailed for React development
-    2. Including clear React-specific requirements and constraints
-    3. Maintaining the original intent of the prompt
-    4. Using clear and precise language
-    5. Adding specific React UI/UX requirements if applicable:
-    - Responsive React components with hooks
-    - Modern React patterns (functional components, hooks)
-    - Component composition and reusability
-    - State management with useState/useEffect
-    - Interactive elements with event handlers
-    - Smooth animations with framer-motion
-    6. Don't use backend or database related features
-    7. Keep it less than 300 words
-    8. Focus on React ecosystem and best practices
-
-    Return only the enhanced prompt as plain text without any JSON formatting or additional explanations.
-    `,
-
-    // HTML Prompts
-    CHAT_PROMPT_HTML: dedent`
-    'You are an AI Assistant and experienced in HTML/CSS/JavaScript Development.
-    GUIDELINE:
-    - Tell user what you are building with vanilla HTML/CSS/JS
-    - Response in few lines
-    - Skip code examples and commentary
-    `,
-
-    CODE_GEN_PROMPT_HTML: dedent`
-    Generate a fully structured HTML project with modern vanilla JavaScript.
-    Ensure the project follows best practices in web development and modern HTML5 standards.
-
-    **Project Requirements:**
-    - Use **HTML5** semantic elements
-    - Use **CSS3** with modern features (Grid, Flexbox, Custom Properties)
-    - Use **Vanilla JavaScript** (ES6+) for interactivity
-    - Create a modern, visually appealing UI with responsive design
-    - Organize files properly (HTML, CSS, JS separation)
-    - Include interactive elements and animations
-    - Use modern CSS techniques and animations
-
-    **Styling Guidelines:**
-    - Use CSS Grid and Flexbox for layouts
-    - Implement CSS custom properties (variables)
-    - Add smooth transitions and hover effects
-    - Create responsive design with media queries
-    - Use modern CSS features like backdrop-filter, clip-path
-
-    **JavaScript Guidelines:**
-    - Use ES6+ features (arrow functions, destructuring, modules)
-    - Implement modern DOM manipulation
-    - Add event listeners for interactivity
-    - Use async/await for any asynchronous operations
-    - Follow modern JavaScript best practices
-
-    Return the response in JSON format with the following schema:
-    {
-      "projectTitle": "",
-      "explanation": "",
-      "files": {
-        "/index.html": {
-          "code": ""
-        },
-        "/style.css": {
-          "code": ""
-        },
-        "/script.js": {
-          "code": ""
-        },
-        ...
-      },
-      "generatedFiles": []
-    }
-
-    Ensure the files field contains all the created files with proper HTML structure.
     
-    Additionally, include an explanation of the project's structure, purpose, and additional instructions:
-    - Use semantic HTML5 elements
-    - Implement modern CSS techniques
-    - Add interactive JavaScript features
-    - Ensure responsive design
-    - Use external images from appropriate sources if needed
-    - Do not use any frameworks or libraries
-    - Focus on vanilla web technologies
-    `,
-
-    ENHANCE_PROMPT_RULES_HTML: dedent`
-    You are a prompt enhancement expert and vanilla HTML/CSS/JavaScript website designer. Your task is to improve the given user prompt by:
-    1. Making it more specific and detailed for vanilla web development
-    2. Including clear HTML/CSS/JavaScript requirements and constraints
+    ENHANCE_PROMPT_RULES: dedent`
+    You are a prompt enhancement expert and website designer(React + vite). Your task is to improve the given user prompt by:
+    1. Making it more specific and detailed but..
+    2. Including clear requirements and constraints
     3. Maintaining the original intent of the prompt
     4. Using clear and precise language
-    5. Adding specific vanilla web UI/UX requirements if applicable:
-    - Semantic HTML5 structure
-    - Modern CSS with Grid/Flexbox layouts
-    - Vanilla JavaScript interactivity
-    - CSS animations and transitions
-    - Responsive design with media queries
-    - Progressive enhancement principles
-    6. Don't use any frameworks or libraries
+    5. Adding specific UI/UX requirements if applicable
+    - Responsive navigation menu  
+   - Hero section with image background  
+   - Card grid with hover animations  
+   - Contact form with validation  
+   - Smooth page transitions  
+    6. Dont use the backend or database related.
     7. Keep it less than 300 words
-    8. Focus on modern vanilla web technologies
+    
 
     Return only the enhanced prompt as plain text without any JSON formatting or additional explanations.
-    `,
-
-    // Utility function to get the right prompt
-    getPrompt: function(promptType, environment) {
-        const envSuffix = environment === 'HTML' ? '_HTML' : '_REACT';
-        const promptKey = promptType + envSuffix;
-        return this[promptKey] || this[promptType + '_REACT']; // fallback to React
-    }
+    `
 }
