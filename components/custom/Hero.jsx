@@ -1,7 +1,7 @@
 "use client"
 import Lookup from '@/data/Lookup';
 import { MessagesContext } from '@/context/MessagesContext';
-import { ArrowRight, Send, Wand2, Loader2, Zap, Code2, Palette } from 'lucide-react';
+import { ArrowRight, Send, Wand2, Loader2, Zap, Code2, Palette, Sparkles } from 'lucide-react';
 import React, { useContext, useState } from 'react';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -100,47 +100,70 @@ function Hero() {
 
                                 {/* Input Area */}
                                 <div className="p-6">
-                                    <div className="flex gap-4">
-                                        <div className="flex-1">
-                                            <textarea
-                                                placeholder="Describe your vision... (e.g., 'Create a modern e-commerce dashboard with dark theme')"
-                                                value={userInput}
-                                                onChange={(e) => setUserInput(e.target.value)}
-                                                className="w-full bg-transparent border-2 border-turquoise-500/20 rounded-xl p-6 text-slate-100 placeholder-turquoise-300/50 focus:border-turquoise-500 focus:ring-0 outline-none font-mono text-lg h-32 resize-none transition-all duration-300 hover:border-turquoise-500/40"
-                                                disabled={isEnhancing}
-                                            />
-                                        </div>
+                                    <div className="relative">
+                                        <textarea
+                                            placeholder="Describe your vision... (e.g., 'Create a modern e-commerce dashboard with dark theme')"
+                                            value={userInput}
+                                            onChange={(e) => setUserInput(e.target.value)}
+                                            className="w-full bg-transparent border-2 border-turquoise-500/20 rounded-xl p-6 pr-32 text-slate-100 placeholder-turquoise-300/50 focus:border-turquoise-500 focus:ring-0 outline-none font-mono text-lg h-32 resize-none transition-all duration-300 hover:border-turquoise-500/40"
+                                            disabled={isEnhancing}
+                                        />
                                         
-                                        {/* Action Buttons */}
-                                        <div className="flex flex-col gap-3">
-                                            {userInput && (
-                                                <>
-                                                    {/* Enhance Button */}
-                                                    <button
-                                                        onClick={enhancePrompt}
-                                                        disabled={isEnhancing}
-                                                        className={`group relative flex items-center justify-center bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 rounded-xl px-6 py-4 transition-all duration-300 hover-lift ${isEnhancing ? 'opacity-70 cursor-not-allowed' : ''}`}
-                                                    >
-                                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-xl blur opacity-0 group-hover:opacity-50 transition duration-300"></div>
+                                        {/* Integrated Action Buttons */}
+                                        {userInput && (
+                                            <div className="absolute right-3 top-3 flex flex-col gap-2">
+                                                {/* Enhance Button */}
+                                                <button
+                                                    onClick={enhancePrompt}
+                                                    disabled={isEnhancing}
+                                                    className={`group relative w-12 h-12 bg-slate-800/80 hover:bg-slate-700/80 border border-emerald-500/30 hover:border-emerald-500/60 rounded-xl transition-all duration-300 hover:scale-105 ${isEnhancing ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                                    title="Enhance prompt with AI"
+                                                >
+                                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                                    <div className="relative flex items-center justify-center h-full">
                                                         {isEnhancing ? (
-                                                            <Loader2 className="h-6 w-6 animate-spin text-white" />
+                                                            <Loader2 className="h-5 w-5 animate-spin text-emerald-400" />
                                                         ) : (
-                                                            <Wand2 className="h-6 w-6 text-white" />
+                                                            <Wand2 className="h-5 w-5 text-emerald-400 group-hover:text-emerald-300 transition-colors duration-300" />
                                                         )}
-                                                    </button>
-                                                    
-                                                    {/* Generate Button */}
-                                                    <button
-                                                        onClick={() => onGenerate(userInput)}
-                                                        disabled={isEnhancing}
-                                                        className={`group relative flex items-center justify-center bg-gradient-to-r from-turquoise-500 to-cyan-500 hover:from-turquoise-600 hover:to-cyan-600 rounded-xl px-6 py-4 transition-all duration-300 hover-lift neon-turquoise ${isEnhancing ? 'opacity-70 cursor-not-allowed' : ''}`}
-                                                    >
-                                                        <div className="absolute inset-0 bg-gradient-to-r from-turquoise-400 to-cyan-400 rounded-xl blur opacity-0 group-hover:opacity-50 transition duration-300"></div>
-                                                        <Send className="h-6 w-6 text-white" />
-                                                    </button>
-                                                </>
-                                            )}
+                                                    </div>
+                                                    {/* Tooltip */}
+                                                    <div className="absolute right-full mr-3 top-1/2 transform -translate-y-1/2 bg-slate-800 text-emerald-400 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
+                                                        Enhance
+                                                    </div>
+                                                </button>
+                                                
+                                                {/* Generate Button */}
+                                                <button
+                                                    onClick={() => onGenerate(userInput)}
+                                                    disabled={isEnhancing}
+                                                    className={`group relative w-12 h-12 bg-gradient-to-r from-turquoise-500/20 to-cyan-500/20 hover:from-turquoise-500/30 hover:to-cyan-500/30 border border-turquoise-500/40 hover:border-turquoise-500/60 rounded-xl transition-all duration-300 hover:scale-105 ${isEnhancing ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                                    title="Generate project"
+                                                >
+                                                    <div className="absolute inset-0 bg-gradient-to-r from-turquoise-400/0 to-cyan-400/0 group-hover:from-turquoise-400/10 group-hover:to-cyan-400/10 rounded-xl transition-all duration-300"></div>
+                                                    <div className="relative flex items-center justify-center h-full">
+                                                        <Send className="h-5 w-5 text-turquoise-400 group-hover:text-turquoise-300 transition-colors duration-300" />
+                                                    </div>
+                                                    {/* Tooltip */}
+                                                    <div className="absolute right-full mr-3 top-1/2 transform -translate-y-1/2 bg-slate-800 text-turquoise-400 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
+                                                        Generate
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                    
+                                    {/* Bottom Actions */}
+                                    <div className="flex items-center justify-between mt-4">
+                                        <div className="flex items-center space-x-2 text-xs text-slate-500">
+                                            <Sparkles className="h-4 w-4 text-turquoise-400/60" />
+                                            <span>Press Ctrl+Enter to enhance, Enter to generate</span>
                                         </div>
+                                        {userInput && (
+                                            <div className="text-xs text-slate-500">
+                                                {userInput.length} characters
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
