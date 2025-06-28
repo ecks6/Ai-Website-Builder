@@ -132,60 +132,60 @@ function CodeView() {
     };
 
     return (
-        <div className='relative'>
-            {/* Enhanced Header */}
-            <div className='glass-dark border-2 border-turquoise-500/20 rounded-t-2xl p-4'>
+        <div className='relative h-[85vh] flex flex-col'>
+            {/* Compact Header */}
+            <div className='glass-dark border-2 border-turquoise-500/20 rounded-t-2xl p-3'>
                 <div className='flex items-center justify-between'>
                     {/* Tab Switcher */}
-                    <div className='flex items-center bg-slate-800/50 p-1 rounded-xl border border-turquoise-500/20'>
+                    <div className='flex items-center bg-slate-800/50 p-1 rounded-lg border border-turquoise-500/20'>
                         <button
                             onClick={() => setActiveTab('code')}
-                            className={`flex items-center space-x-2 px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                            className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                                 activeTab === 'code' 
                                     ? 'bg-gradient-to-r from-turquoise-500 to-cyan-500 text-white shadow-lg neon-turquoise' 
                                     : 'text-slate-400 hover:text-turquoise-400 hover:bg-slate-700/50'
                             }`}
                         >
                             <Code className="h-4 w-4" />
-                            <span>Code Editor</span>
+                            <span>Code</span>
                         </button>
 
                         <button
                             onClick={() => setActiveTab('preview')}
-                            className={`flex items-center space-x-2 px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                            className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                                 activeTab === 'preview' 
                                     ? 'bg-gradient-to-r from-turquoise-500 to-cyan-500 text-white shadow-lg neon-turquoise' 
                                     : 'text-slate-400 hover:text-turquoise-400 hover:bg-slate-700/50'
                             }`}
                         >
                             <Eye className="h-4 w-4" />
-                            <span>Live Preview</span>
+                            <span>Preview</span>
                         </button>
                     </div>
 
                     {/* Action Buttons */}
                     <div className="flex items-center space-x-3">
                         {/* File Count */}
-                        <div className="flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-lg border border-turquoise-500/20">
+                        <div className="flex items-center space-x-2 bg-slate-800/50 px-3 py-1.5 rounded-lg border border-turquoise-500/20">
                             <FileText className="h-4 w-4 text-turquoise-400" />
-                            <span className="text-sm text-slate-300">{Object.keys(files).length} files</span>
+                            <span className="text-sm text-slate-300">{Object.keys(files).length}</span>
                         </div>
 
                         {/* Download Button */}
                         <button
                             onClick={downloadFiles}
-                            className="group relative flex items-center gap-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover-lift"
+                            className="group relative flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 hover-lift text-sm"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-xl blur opacity-0 group-hover:opacity-50 transition duration-300"></div>
-                            <Download className="h-5 w-5 relative z-10" />
-                            <span className="relative z-10">Export Project</span>
+                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-lg blur opacity-0 group-hover:opacity-50 transition duration-300"></div>
+                            <Download className="h-4 w-4 relative z-10" />
+                            <span className="relative z-10">Export</span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* Code Environment */}
-            <div className="relative">
+            {/* Code Environment - Matching Chat Height */}
+            <div className="relative flex-1 overflow-hidden">
                 <SandpackProvider 
                     files={files}
                     template="react" 
@@ -238,23 +238,23 @@ function CodeView() {
                         showLineNumbers: true,
                         showInlineErrors: true,
                         wrapContent: true,
-                        editorHeight: '80vh'
+                        editorHeight: 'calc(85vh - 80px)'
                     }}
                 >
-                    <div className="border-2 border-turquoise-500/20 border-t-0 rounded-b-2xl overflow-hidden">
+                    <div className="border-2 border-turquoise-500/20 border-t-0 rounded-b-2xl overflow-hidden h-full">
                         <SandpackLayout>
                             {activeTab === 'code' ? (
                                 <>
                                     <SandpackFileExplorer 
                                         style={{ 
-                                            height: '80vh',
+                                            height: 'calc(85vh - 80px)',
                                             background: '#0f172a',
                                             borderRight: '1px solid rgba(20, 184, 166, 0.2)'
                                         }} 
                                     />
                                     <SandpackCodeEditor 
                                         style={{ 
-                                            height: '80vh',
+                                            height: 'calc(85vh - 80px)',
                                             background: '#0f172a'
                                         }}
                                         showTabs
@@ -266,7 +266,7 @@ function CodeView() {
                             ) : (
                                 <SandpackPreview 
                                     style={{ 
-                                        height: '80vh',
+                                        height: 'calc(85vh - 80px)',
                                         background: '#0f172a'
                                     }} 
                                     showNavigator={true}
