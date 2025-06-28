@@ -4,17 +4,22 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request) {
     try {
-        const { prompt } = await request.json();
+        const { prompt, environment = 'react' } = await request.json();
+        
+        // Get environment-specific enhancement rules
+        const enhanceRules = Prompt.getEnhancePromptRules(environment);
         
         const result = await chatSession.sendMessage([
-            Prompt.ENHANCE_PROMPT_RULES,
-            `Original prompt: ${prompt}`
+            enhanceRules,
+            `Original prompt: ${prompt}`,
+            `Target environment: ${environment}`
         ]);
         
         const text = result.response.text();
         
         return NextResponse.json({
-            enhancedPrompt: text.trim()
+            enhancedPrompt: text.trim(),
+            environment: environment
         });
     } catch (error) {
         return NextResponse.json({ 
@@ -22,4 +27,4 @@ export async function POST(request) {
             success: false 
         }, { status: 500 });
     }
-} 
+}

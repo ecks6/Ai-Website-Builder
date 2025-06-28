@@ -1,5 +1,5 @@
 export default {
-    SUGGSTIONS: [
+    SUGGSTIONS_REACT: [
         'Create Todo App', 
         'Create a Budget Track App', 
         'Create a Login and Signup page',
@@ -7,6 +7,20 @@ export default {
         "Create a Fully Responsive Blog Platform",
         "Design a Minimalistic Note-Taking App"
     ],
+
+    SUGGSTIONS_HTML: [
+        'Create a Landing Page',
+        'Build a Portfolio Website', 
+        'Design a Restaurant Menu',
+        'Create a Product Showcase',
+        'Build a Contact Form Page',
+        'Design a Photo Gallery'
+    ],
+
+    // Keep backward compatibility
+    get SUGGSTIONS() {
+        return this.SUGGSTIONS_REACT;
+    },
 
     DEFAULT_FILE_REACT: {
         '/public/index.html': {
@@ -60,6 +74,7 @@ export default config;`
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modern Web App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
@@ -248,7 +263,7 @@ const utils = {
         return this.DEFAULT_FILE_REACT; // Keep backward compatibility
     },
 
-    DEPENDANCY: {
+    DEPENDANCY_REACT: {
         "@google/generative-ai": "^0.21.0",
         "@heroicons/react": "^1.0.6",
         "@headlessui/react": "^1.7.17",
@@ -269,5 +284,25 @@ const utils = {
         "uuidv4": "^6.2.13",
         "uuid": "^11.1.0",
         "@mui/material": "^6.4.6"
+    },
+
+    DEPENDANCY_HTML: {
+        // HTML projects typically don't need npm dependencies
+        // But we can include some useful ones for advanced features
+        "tailwindcss": "^3.4.1",
+        "autoprefixer": "^10.0.0",
+        "postcss": "^8"
+    },
+
+    // Get dependencies based on environment
+    getDependencies: function(environment = 'react') {
+        if (environment === 'html') {
+            return this.DEPENDANCY_HTML;
+        }
+        return this.DEPENDANCY_REACT;
+    },
+
+    get DEPENDANCY() {
+        return this.DEPENDANCY_REACT; // Keep backward compatibility
     }
 }
