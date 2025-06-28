@@ -119,13 +119,8 @@ function ChatView() {
                                         {msg.content}
                                     </ReactMarkdown>
                                 </div>
-                                <div className="text-xs text-slate-500 mt-2 px-2 flex items-center gap-2">
+                                <div className="text-xs text-slate-500 mt-2 px-2">
                                     <span>{msg.role === 'user' ? 'You' : 'AI Assistant'}</span>
-                                    {msg.model && (
-                                        <span className="bg-slate-700/50 px-2 py-0.5 rounded text-xs">
-                                            {msg.model}
-                                        </span>
-                                    )}
                                 </div>
                             </div>
                         </div>
@@ -145,7 +140,7 @@ function ChatView() {
                                             <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
                                             <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
                                         </div>
-                                        <span className="font-medium">Thinking with {selectedModel}...</span>
+                                        <span className="font-medium">Thinking...</span>
                                     </div>
                                 </div>
                             </div>
@@ -181,20 +176,6 @@ function ChatView() {
                                     <Send className="h-5 w-5 text-white" />
                                 </button>
                             )}
-                        </div>
-                    </div>
-                    
-                    {/* Quick Actions */}
-                    <div className="flex items-center justify-between mt-4">
-                        <div className="flex items-center space-x-2 text-xs text-slate-500">
-                            <Sparkles className="h-4 w-4" />
-                            <span>Press Enter to send, Shift+Enter for new line</span>
-                        </div>
-                        <div className="text-xs text-slate-500 flex items-center gap-2">
-                            <span>Powered by</span>
-                            <span className="bg-slate-700/50 px-2 py-0.5 rounded text-xs text-turquoise-400">
-                                {selectedModel}
-                            </span>
                         </div>
                     </div>
                 </div>

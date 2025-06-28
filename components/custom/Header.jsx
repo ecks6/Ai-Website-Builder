@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Zap, Settings } from 'lucide-react';
+import { Sparkles, Zap, Settings, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import ModelSelector from './ModelSelector';
 import { useAIModel } from '@/context/AIModelContext';
@@ -48,25 +48,17 @@ function Header() {
                         </div>
                     </Link>
 
-                    {/* Center - Model Selector */}
-                    <div className="hidden lg:block flex-1 max-w-xs mx-8">
+                    {/* Center - Minimalist Model Selector */}
+                    <div className="flex-1 flex justify-center max-w-xs mx-8">
                         <ModelSelector 
                             selectedModel={selectedModel}
                             onModelChange={setSelectedModel}
+                            minimalist={true}
                         />
                     </div>
 
                     {/* Right Side - Status Badges */}
                     <div className="flex items-center space-x-3">
-                        {/* Mobile Model Selector */}
-                        <div className="lg:hidden">
-                            <ModelSelector 
-                                selectedModel={selectedModel}
-                                onModelChange={setSelectedModel}
-                                className="w-48"
-                            />
-                        </div>
-
                         <div className="relative group">
                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-turquoise-400 rounded-full blur opacity-60 group-hover:opacity-100 transition duration-300"></div>
                             <div className="relative flex items-center space-x-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-4 py-2 rounded-full text-sm font-semibold border border-emerald-500/30 hover:border-emerald-500/50 transition-all duration-300 cursor-pointer hover-lift">
