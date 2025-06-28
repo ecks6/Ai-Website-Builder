@@ -1,7 +1,7 @@
 "use client"
 import Lookup from '@/data/Lookup';
 import { MessagesContext } from '@/context/MessagesContext';
-import { ArrowRight, Send, Wand2, Loader2 } from 'lucide-react';
+import { ArrowRight, Send, Wand2, Loader2, Sparkles } from 'lucide-react';
 import React, { useContext, useState } from 'react';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -137,11 +137,15 @@ function Hero() {
                         </div>
                     </div>
 
-                    {/* Enhanced Suggestions Grid */}
-                    <div className="w-full max-w-7xl">
-                        <div className="text-center mb-8">
-                            <h3 className="text-2xl font-bold text-turquoise-400 mb-2">Quick Start Templates</h3>
-                            <p className="text-slate-400">Click any suggestion to get started instantly</p>
+                    {/* Optimized Templates Section */}
+                    <div className="w-full max-w-5xl">
+                        <div className="text-center mb-12">
+                            <div className="inline-flex items-center space-x-2 bg-turquoise-500/10 rounded-full px-6 py-3 mb-4 border border-turquoise-500/30">
+                                <Sparkles className="h-5 w-5 text-turquoise-400" />
+                                <span className="text-turquoise-400 font-semibold">Quick Start</span>
+                            </div>
+                            <h3 className="text-3xl font-bold text-white mb-3">Choose a Template</h3>
+                            <p className="text-slate-400 text-lg">Start with a pre-built template and customize it to your needs</p>
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -149,20 +153,23 @@ function Hero() {
                                 <button
                                     key={index}
                                     onClick={() => onSuggestionClick(suggestion)}
-                                    className="group relative p-6 glass-dark hover:bg-slate-800/60 border-2 border-turquoise-500/20 rounded-xl text-left transition-all duration-300 hover:border-turquoise-500/50 hover-lift"
+                                    className="group relative p-8 glass-dark hover:bg-slate-800/60 border-2 border-turquoise-500/20 rounded-2xl text-left transition-all duration-300 hover:border-turquoise-500/50 hover-lift"
                                 >
                                     {/* Hover glow */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-turquoise-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-turquoise-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
                                     
                                     {/* Content */}
                                     <div className="relative z-10">
-                                        <div className="flex items-start justify-between mb-3">
-                                            <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-pulse"></div>
-                                            <ArrowRight className="h-4 w-4 text-turquoise-400/60 group-hover:text-turquoise-400 group-hover:translate-x-1 transition-all duration-300" />
+                                        <div className="flex items-start justify-between mb-4">
+                                            <div className="w-3 h-3 bg-turquoise-400 rounded-full animate-pulse"></div>
+                                            <ArrowRight className="h-5 w-5 text-turquoise-400/60 group-hover:text-turquoise-400 group-hover:translate-x-1 transition-all duration-300" />
                                         </div>
-                                        <span className="text-slate-300 group-hover:text-turquoise-300 font-medium text-sm leading-relaxed transition-colors duration-300">
+                                        <h4 className="text-white group-hover:text-turquoise-300 font-semibold text-lg mb-2 transition-colors duration-300">
                                             {suggestion}
-                                        </span>
+                                        </h4>
+                                        <p className="text-slate-400 text-sm group-hover:text-slate-300 transition-colors duration-300">
+                                            Click to start building
+                                        </p>
                                     </div>
                                 </button>
                             ))}
