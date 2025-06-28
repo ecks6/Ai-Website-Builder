@@ -17,15 +17,15 @@ const Workspace = () => {
             </div>
 
             {/* Content */}
-            <div className='relative z-10 p-8'>
-                <div className='grid grid-cols-1 lg:grid-cols-4 gap-8 h-[calc(100vh-8rem)]'>
+            <div className='relative z-10 p-4 md:p-6 lg:p-8'>
+                <div className='grid grid-cols-1 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8'>
                     {/* Chat Panel */}
-                    <div className='lg:col-span-1'>
+                    <div className='lg:col-span-1 h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] lg:h-[calc(100vh-4rem)]'>
                         <ChatView />
                     </div>
                     
                     {/* Code Panel */}
-                    <div className='lg:col-span-3'>
+                    <div className='lg:col-span-3 h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] lg:h-[calc(100vh-4rem)]'>
                         <CodeView />
                     </div>
                 </div>

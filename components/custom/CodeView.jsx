@@ -132,60 +132,63 @@ function CodeView() {
     };
 
     return (
-        <div className='relative'>
+        <div className='h-full flex flex-col'>
             {/* Enhanced Header */}
-            <div className='glass-dark border-2 border-turquoise-500/20 rounded-t-2xl p-4'>
-                <div className='flex items-center justify-between'>
+            <div className='glass-dark border-2 border-turquoise-500/20 rounded-t-2xl p-3 md:p-4 flex-shrink-0'>
+                <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0'>
                     {/* Tab Switcher */}
                     <div className='flex items-center bg-slate-800/50 p-1 rounded-xl border border-turquoise-500/20'>
                         <button
                             onClick={() => setActiveTab('code')}
-                            className={`flex items-center space-x-2 px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                            className={`flex items-center space-x-2 px-3 md:px-6 py-2 md:py-3 rounded-lg text-xs md:text-sm font-medium transition-all duration-300 ${
                                 activeTab === 'code' 
                                     ? 'bg-gradient-to-r from-turquoise-500 to-cyan-500 text-white shadow-lg neon-turquoise' 
                                     : 'text-slate-400 hover:text-turquoise-400 hover:bg-slate-700/50'
                             }`}
                         >
-                            <Code className="h-4 w-4" />
-                            <span>Code Editor</span>
+                            <Code className="h-3 w-3 md:h-4 md:w-4" />
+                            <span className="hidden sm:inline">Code Editor</span>
+                            <span className="sm:hidden">Code</span>
                         </button>
 
                         <button
                             onClick={() => setActiveTab('preview')}
-                            className={`flex items-center space-x-2 px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                            className={`flex items-center space-x-2 px-3 md:px-6 py-2 md:py-3 rounded-lg text-xs md:text-sm font-medium transition-all duration-300 ${
                                 activeTab === 'preview' 
                                     ? 'bg-gradient-to-r from-turquoise-500 to-cyan-500 text-white shadow-lg neon-turquoise' 
                                     : 'text-slate-400 hover:text-turquoise-400 hover:bg-slate-700/50'
                             }`}
                         >
-                            <Eye className="h-4 w-4" />
-                            <span>Live Preview</span>
+                            <Eye className="h-3 w-3 md:h-4 md:w-4" />
+                            <span className="hidden sm:inline">Live Preview</span>
+                            <span className="sm:hidden">Preview</span>
                         </button>
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-2 md:space-x-3 w-full sm:w-auto">
                         {/* File Count */}
-                        <div className="flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-lg border border-turquoise-500/20">
-                            <FileText className="h-4 w-4 text-turquoise-400" />
-                            <span className="text-sm text-slate-300">{Object.keys(files).length} files</span>
+                        <div className="flex items-center space-x-2 bg-slate-800/50 px-2 md:px-4 py-1 md:py-2 rounded-lg border border-turquoise-500/20">
+                            <FileText className="h-3 w-3 md:h-4 md:w-4 text-turquoise-400" />
+                            <span className="text-xs md:text-sm text-slate-300">{Object.keys(files).length} files</span>
                         </div>
 
                         {/* Download Button */}
                         <button
                             onClick={downloadFiles}
-                            className="group relative flex items-center gap-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover-lift"
+                            className="group relative flex items-center gap-2 md:gap-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-3 md:px-6 py-2 md:py-3 rounded-xl font-medium transition-all duration-300 hover-lift text-xs md:text-sm"
                         >
                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-xl blur opacity-0 group-hover:opacity-50 transition duration-300"></div>
-                            <Download className="h-5 w-5 relative z-10" />
-                            <span className="relative z-10">Export Project</span>
+                            <Download className="h-3 w-3 md:h-5 md:w-5 relative z-10" />
+                            <span className="relative z-10 hidden sm:inline">Export Project</span>
+                            <span className="relative z-10 sm:hidden">Export</span>
                         </button>
                     </div>
                 </div>
             </div>
 
             {/* Code Environment */}
-            <div className="relative">
+            <div className="flex-1 min-h-0 relative">
                 <SandpackProvider 
                     files={files}
                     template="react" 
@@ -238,23 +241,23 @@ function CodeView() {
                         showLineNumbers: true,
                         showInlineErrors: true,
                         wrapContent: true,
-                        editorHeight: '80vh'
+                        editorHeight: 'calc(100vh - 12rem)'
                     }}
                 >
-                    <div className="border-2 border-turquoise-500/20 border-t-0 rounded-b-2xl overflow-hidden">
+                    <div className="border-2 border-turquoise-500/20 border-t-0 rounded-b-2xl overflow-hidden h-full">
                         <SandpackLayout>
                             {activeTab === 'code' ? (
                                 <>
                                     <SandpackFileExplorer 
                                         style={{ 
-                                            height: '80vh',
+                                            height: 'calc(100vh - 12rem)',
                                             background: '#0f172a',
                                             borderRight: '1px solid rgba(20, 184, 166, 0.2)'
                                         }} 
                                     />
                                     <SandpackCodeEditor 
                                         style={{ 
-                                            height: '80vh',
+                                            height: 'calc(100vh - 12rem)',
                                             background: '#0f172a'
                                         }}
                                         showTabs
@@ -266,7 +269,7 @@ function CodeView() {
                             ) : (
                                 <SandpackPreview 
                                     style={{ 
-                                        height: '80vh',
+                                        height: 'calc(100vh - 12rem)',
                                         background: '#0f172a'
                                     }} 
                                     showNavigator={true}
@@ -283,15 +286,15 @@ function CodeView() {
                     <div className='absolute inset-0 glass-dark rounded-2xl flex items-center justify-center z-50'>
                         <div className="text-center space-y-6">
                             <div className="relative">
-                                <div className="w-20 h-20 border-4 border-turquoise-500/20 rounded-full"></div>
-                                <div className="absolute inset-0 w-20 h-20 border-4 border-turquoise-500 rounded-full border-t-transparent animate-spin"></div>
+                                <div className="w-16 h-16 md:w-20 md:h-20 border-4 border-turquoise-500/20 rounded-full"></div>
+                                <div className="absolute inset-0 w-16 h-16 md:w-20 md:h-20 border-4 border-turquoise-500 rounded-full border-t-transparent animate-spin"></div>
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <Zap className="h-8 w-8 text-turquoise-400 animate-pulse" />
+                                    <Zap className="h-6 w-6 md:h-8 md:w-8 text-turquoise-400 animate-pulse" />
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <h3 className="text-xl font-bold text-turquoise-400">Generating Code</h3>
-                                <p className="text-slate-400">AI is crafting your project...</p>
+                                <h3 className="text-lg md:text-xl font-bold text-turquoise-400">Generating Code</h3>
+                                <p className="text-sm md:text-base text-slate-400">AI is crafting your project...</p>
                                 <div className="flex justify-center space-x-1">
                                     <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-bounce"></div>
                                     <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
