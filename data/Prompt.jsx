@@ -46,6 +46,8 @@ Ensure the project follows best practices in component organization and styling.
 - "uuid": "^11.1.0"  
 - "@mui/material": "^6.4.6"  
 
+    **CRITICAL: Your entire response MUST be a valid JSON object and contain nothing else. No conversational text, no markdown fences, no explanations, no additional commentary. Start with { and end with }.**
+
     Return the response in JSON format with the following schema:
     {
       "projectTitle": "",
@@ -77,6 +79,8 @@ Ensure the project follows best practices in component organization and styling.
     - The lucide-react library is also available to be imported IF NECESSARY.
     - Update the package.json file with the required dependencies.
     - Do not use backend or database related.
+
+    **REMEMBER: Output ONLY the JSON object. No other text.**
     `,
 
     // HTML-specific prompts
@@ -112,6 +116,8 @@ Ensure the project follows best practices in component organization and styling.
     - Optimize images for web performance
     - Use appropriate alt text for accessibility
 
+    **CRITICAL: Your entire response MUST be a valid JSON object and contain nothing else. No conversational text, no markdown fences, no explanations, no additional commentary. Start with { and end with }.**
+
     Return the response in JSON format with the following schema:
     {
       "projectTitle": "",
@@ -134,6 +140,8 @@ Ensure the project follows best practices in component organization and styling.
     Create a well-structured HTML project with modern web standards.
     Include proper semantic HTML, responsive CSS, and interactive JavaScript.
     Do not use any frameworks or libraries except Tailwind CSS via CDN.
+
+    **REMEMBER: Output ONLY the JSON object. No other text.**
     `,
 
     // Enhanced prompt rules for different environments

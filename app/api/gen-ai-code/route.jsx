@@ -24,7 +24,27 @@ export async function POST(req){
         const result = await aiSession.sendMessage(fullPrompt);
         const resp = result.response.text();
         
-        const parsedResponse = JSON.parse(resp);
+        // Extract JSON from the response
+        let jsonString = resp;
+        
+        // Try to extract JSON from markdown code blocks first
+        const jsonBlockMatch = resp.match(/```json\s*([\s\S]*?)\s*```/);
+        if (jsonBlockMatch) {
+            jsonString = jsonBlockMatch[1];
+        } else {
+            // If no markdown block, try to find JSON object boundaries
+            const firstBrace = resp.indexOf('{');
+            const lastBrace = resp.lastIndexOf('}');
+            
+            if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+                jsonString = resp.substring(firstBrace, lastBrace + 1);
+            }
+        }
+        
+        // Clean up any remaining markdown or extra text
+        jsonString = jsonString.trim();
+        
+        const parsedResponse = JSON.parse(jsonString);
         
         // Add environment and model info to response
         return NextResponse.json({
@@ -34,10 +54,12 @@ export async function POST(req){
         });
     } catch(e) {
         console.error('Code Generation Error:', e);
+        console.error('Raw AI Response:', result?.response?.text?.() || 'No response');
         return NextResponse.json({
             error: e.message,
             environment: environment,
-            model: model
+            model: model,
+            rawResponse: result?.response?.text?.() || 'No response available'
         }, { status: 500 });
     }
 }
