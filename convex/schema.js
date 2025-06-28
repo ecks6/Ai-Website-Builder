@@ -8,12 +8,8 @@ export default defineSchema({
         picture: v.string(),
         uid: v.string()
     }),
-    workspace: defineTable({
-        messages: v.array(v.object({
-            role: v.string(),
-            content: v.string()
-        })),
-        fileData: v.optional(v.any()),
-        selectedEnv: v.optional(v.string()),
+    workspace:defineTable({
+        messages:v.any(),
+        fileData:v.optional(v.any()),
     })
 });

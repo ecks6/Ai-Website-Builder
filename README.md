@@ -40,7 +40,6 @@ Transform your ideas into fully functional websites using cutting-edge AI techno
 - Node.js v18+
 - npm, yarn, or pnpm
 - Gemini API key (for AI features)
-- Convex account and Personal Access Token
 
 ### Installation
 1. Clone the repository:
@@ -58,16 +57,7 @@ Create a `.env.local` file in the root directory and add the following:
 ```env
 GEMINI_API_KEY=your_api_key_here
 NEXT_PUBLIC_CONVEX_URL=your_convex_url
-CONVEX_ACCESS_KEY=your_convex_personal_access_token
 ```
-
-**Important**: To get your Convex Personal Access Token:
-1. Go to your [Convex Dashboard](https://dashboard.convex.dev)
-2. Navigate to Settings → Access Tokens
-3. Generate a new Personal Access Token
-4. Add it to your `.env.local` file as `CONVEX_ACCESS_KEY`
-
-This token allows the Convex CLI to authenticate without browser interaction.
 
 4. Start the Development Server
 ```bash
@@ -129,7 +119,6 @@ Deploy to Vercel in one click:
 ## Required Environment Variables:
 - `GEMINI_API_KEY`
 - `NEXT_PUBLIC_CONVEX_URL`
-- `CONVEX_ACCESS_KEY` (for development)
 
 ---
 
@@ -153,3 +142,4 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for details.
 - **Google Gemini AI** for advanced language models
 - **Vercel** for hosting support
 - **Convex** for real-time backend infrastructure
+

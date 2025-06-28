@@ -14,14 +14,13 @@ import Prompt from '@/data/Prompt';
 import { useConvex, useMutation } from 'convex/react';
 import { useParams } from 'next/navigation';
 import { api } from '@/convex/_generated/api';
-import { Loader2Icon, Download, Code, Eye, FileText, Zap, Globe } from 'lucide-react';
+import { Loader2Icon, Download, Code, Eye, FileText, Zap } from 'lucide-react';
 import JSZip from 'jszip';
 
 function CodeView() {
     const { id } = useParams();
     const [activeTab, setActiveTab] = useState('code');
     const [files, setFiles] = useState(Lookup?.DEFAULT_FILE);
-    const [selectedEnv, setSelectedEnv] = useState('react'); // Environment state
     const { messages } = useContext(MessagesContext);
     const UpdateFiles = useMutation(api.workspace.UpdateFiles);
     const convex = useConvex();
@@ -35,15 +34,8 @@ function CodeView() {
         const result = await convex.query(api.workspace.GetWorkspace, {
             workspaceId: id
         });
-        
-        // Set environment from workspace
-        const env = result?.selectedEnv || 'react';
-        setSelectedEnv(env);
-        
-        // Get appropriate default files for environment
-        const defaultFiles = Lookup.getDefaultFiles(env);
         const processedFiles = preprocessFiles(result?.fileData || {});
-        const mergedFiles = { ...defaultFiles, ...processedFiles };
+        const mergedFiles = { ...Lookup.DEFAULT_FILE, ...processedFiles };
         setFiles(mergedFiles);
     }
 
@@ -74,15 +66,13 @@ function CodeView() {
 
     const GenerateAiCode = async () => {
         setLoading(true);
-        const PROMPT = JSON.stringify(messages) + " " + Prompt.getPrompt('CODE_GEN_PROMPT', selectedEnv);
+        const PROMPT = JSON.stringify(messages) + " " + Prompt.CODE_GEN_PROMPT;
         const result = await axios.post('/api/gen-ai-code', {
-            prompt: PROMPT,
-            selectedEnv: selectedEnv // Pass environment to API
+            prompt: PROMPT
         });
 
         const processedAiFiles = preprocessFiles(result.data?.files || {});
-        const defaultFiles = Lookup.getDefaultFiles(selectedEnv);
-        const mergedFiles = { ...defaultFiles, ...processedAiFiles };
+        const mergedFiles = { ...Lookup.DEFAULT_FILE, ...processedAiFiles };
         setFiles(mergedFiles);
 
         await UpdateFiles({
@@ -114,27 +104,24 @@ function CodeView() {
                 }
             });
 
-            // Add package.json only for React projects
-            if (selectedEnv === 'react') {
-                const packageJson = {
-                    name: "ai-generated-react-project",
-                    version: "1.0.0",
-                    private: true,
-                    dependencies: Lookup.DEPENDANCY,
-                    scripts: {
-                        "dev": "vite",
-                        "build": "vite build",
-                        "preview": "vite preview"
-                    }
-                };
-                zip.file("package.json", JSON.stringify(packageJson, null, 2));
-            }
+            const packageJson = {
+                name: "ai-generated-project",
+                version: "1.0.0",
+                private: true,
+                dependencies: Lookup.DEPENDANCY,
+                scripts: {
+                    "dev": "vite",
+                    "build": "vite build",
+                    "preview": "vite preview"
+                }
+            };
+            zip.file("package.json", JSON.stringify(packageJson, null, 2));
 
             const blob = await zip.generateAsync({ type: "blob" });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `ai-${selectedEnv}-project.zip`;
+            a.download = 'ai-project.zip';
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
@@ -142,11 +129,6 @@ function CodeView() {
         } catch (error) {
             console.error('Error downloading files:', error);
         }
-    };
-
-    // Get template based on environment
-    const getTemplate = () => {
-        return selectedEnv === 'html' ? 'vanilla' : 'react';
     };
 
     return (
@@ -183,18 +165,6 @@ function CodeView() {
 
                     {/* Action Buttons */}
                     <div className="flex items-center space-x-3">
-                        {/* Environment Indicator */}
-                        <div className="flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-lg border border-turquoise-500/20">
-                            {selectedEnv === 'react' ? (
-                                <Code className="h-4 w-4 text-blue-400" />
-                            ) : (
-                                <Globe className="h-4 w-4 text-orange-400" />
-                            )}
-                            <span className="text-sm text-slate-300 font-medium">
-                                {selectedEnv === 'react' ? 'React + Vite' : 'HTML/CSS/JS'}
-                            </span>
-                        </div>
-
                         {/* File Count */}
                         <div className="flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-lg border border-turquoise-500/20">
                             <FileText className="h-4 w-4 text-turquoise-400" />
@@ -218,7 +188,7 @@ function CodeView() {
             <div className="relative">
                 <SandpackProvider 
                     files={files}
-                    template={getTemplate()}
+                    template="react" 
                     theme={{
                         colors: {
                             surface1: '#0f172a',
@@ -252,14 +222,14 @@ function CodeView() {
                             lineHeight: '1.6'
                         }
                     }}
-                    customSetup={selectedEnv === 'react' ? {
+                    customSetup={{
                         dependencies: {
                             ...Lookup.DEPENDANCY
                         },
                         entry: '/index.js'
-                    } : undefined}
+                    }}
                     options={{
-                        externalResources: selectedEnv === 'react' ? ['https://cdn.tailwindcss.com'] : [],
+                        externalResources: ['https://cdn.tailwindcss.com'],
                         bundlerTimeoutSecs: 120,
                         recompileMode: "immediate",
                         recompileDelay: 300,
@@ -320,12 +290,8 @@ function CodeView() {
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <h3 className="text-xl font-bold text-turquoise-400">
-                                    Generating {selectedEnv === 'react' ? 'React' : 'HTML'} Code
-                                </h3>
-                                <p className="text-slate-400">
-                                    AI is crafting your {selectedEnv === 'react' ? 'React components' : 'web pages'}...
-                                </p>
+                                <h3 className="text-xl font-bold text-turquoise-400">Generating Code</h3>
+                                <p className="text-slate-400">AI is crafting your project...</p>
                                 <div className="flex justify-center space-x-1">
                                     <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-bounce"></div>
                                     <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
