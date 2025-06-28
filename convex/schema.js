@@ -9,8 +9,11 @@ export default defineSchema({
         uid: v.string()
     }),
     workspace: defineTable({
-        messages: v.any(),
+        messages: v.array(v.object({
+            role: v.string(),
+            content: v.string()
+        })),
         fileData: v.optional(v.any()),
-        selectedEnv: v.optional(v.string()), // Added environment selection field
+        selectedEnv: v.optional(v.string()),
     })
 });
