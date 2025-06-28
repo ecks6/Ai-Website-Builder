@@ -4,7 +4,7 @@ import React from 'react';
 
 const Workspace = () => {
     return (
-        <div className="min-h-screen bg-slate-950 relative overflow-hidden">
+        <div className="h-screen bg-slate-950 relative overflow-hidden flex flex-col">
             {/* Enhanced Animated Background */}
             <div className="absolute inset-0">
                 {/* Grid pattern */}
@@ -16,24 +16,17 @@ const Workspace = () => {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gradient-to-r from-turquoise-500/5 to-cyan-500/5 rounded-full blur-3xl"></div>
             </div>
 
-            {/* Content Container */}
-            <div className='relative z-10 h-screen flex flex-col'>
-                {/* Main Content Grid */}
-                <div className='flex-1 p-2 sm:p-4 md:p-6 lg:p-8'>
-                    <div className='h-full grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-4 md:gap-6 lg:gap-8'>
-                        {/* Chat Panel */}
-                        <div className='lg:col-span-4 xl:col-span-3 h-full'>
-                            <div className='h-full'>
-                                <ChatView />
-                            </div>
-                        </div>
-                        
-                        {/* Code Panel */}
-                        <div className='lg:col-span-8 xl:col-span-9 h-full'>
-                            <div className='h-full'>
-                                <CodeView />
-                            </div>
-                        </div>
+            {/* Main Content Container */}
+            <div className='relative z-10 flex-1 p-2 sm:p-4 lg:p-8 min-h-0'>
+                <div className='h-full grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-4 lg:gap-8'>
+                    {/* Chat Panel - Fixed Height */}
+                    <div className='lg:col-span-4 xl:col-span-3 h-full min-h-0'>
+                        <ChatView />
+                    </div>
+                    
+                    {/* Code Panel - Fixed Height */}
+                    <div className='lg:col-span-8 xl:col-span-9 h-full min-h-0'>
+                        <CodeView />
                     </div>
                 </div>
             </div>

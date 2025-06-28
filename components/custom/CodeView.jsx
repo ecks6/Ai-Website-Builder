@@ -133,7 +133,7 @@ function CodeView() {
 
     return (
         <div className='h-full flex flex-col'>
-            {/* Enhanced Header */}
+            {/* Enhanced Header - Fixed */}
             <div className='glass-dark border-2 border-turquoise-500/20 rounded-t-2xl p-3 lg:p-4 flex-shrink-0'>
                 <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0'>
                     {/* Tab Switcher */}
@@ -187,7 +187,7 @@ function CodeView() {
                 </div>
             </div>
 
-            {/* Code Environment */}
+            {/* Code Environment - Flexible */}
             <div className="flex-1 min-h-0 relative">
                 <SandpackProvider 
                     files={files}

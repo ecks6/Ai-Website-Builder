@@ -67,7 +67,7 @@ function ChatView() {
 
     return (
         <div className="h-full flex flex-col glass-dark border border-turquoise-500/20 rounded-2xl overflow-hidden">
-            {/* Header */}
+            {/* Header - Fixed */}
             <div className="bg-gradient-to-r from-turquoise-500/10 to-cyan-500/10 p-3 lg:p-4 border-b border-turquoise-500/20 flex-shrink-0">
                 <div className="flex items-center space-x-2 lg:space-x-3">
                     <div className="relative">
@@ -82,7 +82,7 @@ function ChatView() {
                 </div>
             </div>
 
-            {/* Chat Messages */}
+            {/* Chat Messages - Scrollable */}
             <div className="flex-1 overflow-y-auto scrollbar-hide p-3 lg:p-6 min-h-0">
                 <div className="space-y-4 lg:space-y-6">
                     {Array.isArray(messages) && messages?.map((msg, index) => (
@@ -144,7 +144,7 @@ function ChatView() {
                 </div>
             </div>
 
-            {/* Input Section */}
+            {/* Input Section - Fixed */}
             <div className="border-t border-turquoise-500/20 bg-slate-900/50 backdrop-blur-sm p-3 lg:p-6 flex-shrink-0">
                 <div className="relative">
                     <div className="flex gap-3 lg:gap-4">
