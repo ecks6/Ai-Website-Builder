@@ -1,7 +1,7 @@
 "use client"
 import Lookup from '@/data/Lookup';
 import { MessagesContext } from '@/context/MessagesContext';
-import { ArrowRight, Send, Wand2, Loader2, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Send, Wand2, Loader2, Zap, Code2, Rocket } from 'lucide-react';
 import React, { useContext, useState } from 'react';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -56,101 +56,159 @@ function Hero() {
 
     return (
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
-            {/* Subtle background */}
+            {/* Animated background */}
             <div className="absolute inset-0">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#14b8a6_1px,transparent_1px),linear-gradient(to_bottom,#14b8a6_1px,transparent_1px)] bg-[size:60px_60px] opacity-[0.02]"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gradient-to-r from-turquoise-500/5 to-cyan-500/5 rounded-full blur-3xl"></div>
+                {/* Grid pattern */}
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#14b8a6_1px,transparent_1px),linear-gradient(to_bottom,#14b8a6_1px,transparent_1px)] bg-[size:40px_40px] opacity-[0.03]"></div>
+                
+                {/* Gradient orbs */}
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-turquoise-500/20 to-cyan-500/20 rounded-full blur-3xl animate-float"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-500/20 to-turquoise-500/20 rounded-full blur-3xl animate-float" style={{animationDelay: '1s'}}></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-turquoise-500/10 to-cyan-500/10 rounded-full blur-3xl"></div>
             </div>
 
             <div className="container mx-auto px-6 py-20 relative z-10">
-                <div className="flex flex-col items-center justify-center min-h-[80vh] space-y-12">
-                    
-                    {/* Minimalist Header */}
-                    <div className="text-center space-y-6 max-w-4xl">
-                        <div className="inline-flex items-center space-x-2 bg-turquoise-500/10 rounded-full px-4 py-2 border border-turquoise-500/20">
-                            <Sparkles className="h-4 w-4 text-turquoise-400" />
-                            <span className="text-turquoise-400 text-sm font-medium">AI Website Builder</span>
+                <div className="flex flex-col items-center justify-center space-y-16">
+                    {/* Hero Header */}
+                    <div className="text-center space-y-8 max-w-5xl">
+                        {/* Status Badge */}
+                        <div className="inline-flex items-center justify-center space-x-3 bg-turquoise-500/10 rounded-full px-8 py-4 mb-8 border border-turquoise-500/30 glass-dark hover-lift group">
+                            <div className="relative">
+                                <Sparkles className="h-6 w-6 text-turquoise-400 animate-spin-slow" />
+                                <div className="absolute inset-0 bg-turquoise-400 rounded-full blur-sm opacity-50 animate-pulse"></div>
+                            </div>
+                            <span className="text-turquoise-400 text-lg font-bold tracking-wider">
+                                NEXT-GEN AI DEVELOPMENT
+                            </span>
+                            <Zap className="h-5 w-5 text-yellow-400 animate-pulse" />
                         </div>
 
-                        <h1 className="text-5xl md:text-6xl font-bold leading-tight">
-                            <span className="block text-white mb-2">Build websites with</span>
-                            <span className="block bg-gradient-to-r from-turquoise-400 to-cyan-400 bg-clip-text text-transparent">
-                                AI assistance
-                            </span>
-                        </h1>
-                        
-                        <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-                            Describe your idea and watch it transform into production-ready code
-                        </p>
+                        {/* Main Title */}
+                        <div className="space-y-6">
+                            <h1 className="text-7xl md:text-8xl font-black leading-tight">
+                                <span className="block bg-gradient-to-r from-white via-turquoise-200 to-cyan-300 bg-clip-text text-transparent animate-gradient">
+                                    Build The
+                                </span>
+                                <span className="block bg-gradient-to-r from-turquoise-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent text-neon animate-gradient">
+                                    Future
+                                </span>
+                            </h1>
+                            <p className="text-2xl text-slate-300 max-w-4xl mx-auto font-light leading-relaxed">
+                                Transform your wildest ideas into 
+                                <span className="text-turquoise-400 font-semibold"> production-ready code </span>
+                                with AI-powered assistance that thinks like a developer
+                            </p>
+                        </div>
+
+                        {/* Feature Pills */}
+                        <div className="flex flex-wrap justify-center gap-4 mt-8">
+                            {[
+                                { icon: Code2, text: "Smart Code Gen" },
+                                { icon: Zap, text: "Lightning Fast" },
+                                { icon: Rocket, text: "Deploy Ready" }
+                            ].map((feature, index) => (
+                                <div key={index} className="flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-full border border-turquoise-500/20 hover:border-turquoise-500/40 transition-all duration-300 hover-lift">
+                                    <feature.icon className="h-4 w-4 text-turquoise-400" />
+                                    <span className="text-sm text-slate-300 font-medium">{feature.text}</span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
-                    {/* Clean Input Section */}
-                    <div className="w-full max-w-3xl">
-                        <div className="relative">
-                            <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-turquoise-500/20 p-6">
-                                <div className="flex gap-4">
-                                    <div className="flex-1">
-                                        <textarea
-                                            placeholder="Describe your website idea..."
-                                            value={userInput}
-                                            onChange={(e) => setUserInput(e.target.value)}
-                                            className="w-full bg-slate-800/50 border border-turquoise-500/20 rounded-xl p-4 text-slate-100 placeholder-slate-500 focus:border-turquoise-500 focus:ring-0 outline-none resize-none h-32 transition-all duration-300"
-                                            disabled={isEnhancing}
-                                        />
-                                    </div>
-                                    
-                                    {userInput && (
-                                        <div className="flex flex-col gap-2">
-                                            <button
-                                                onClick={enhancePrompt}
-                                                disabled={isEnhancing}
-                                                className="flex items-center justify-center bg-slate-700 hover:bg-slate-600 rounded-xl p-3 transition-all duration-200 disabled:opacity-50"
-                                                title="Enhance prompt"
-                                            >
-                                                {isEnhancing ? (
-                                                    <Loader2 className="h-5 w-5 animate-spin text-slate-300" />
-                                                ) : (
-                                                    <Wand2 className="h-5 w-5 text-slate-300" />
-                                                )}
-                                            </button>
-                                            
-                                            <button
-                                                onClick={() => onGenerate(userInput)}
-                                                disabled={isEnhancing}
-                                                className="flex items-center justify-center bg-turquoise-500 hover:bg-turquoise-600 rounded-xl p-3 transition-all duration-200 disabled:opacity-50"
-                                                title="Generate website"
-                                            >
-                                                <Send className="h-5 w-5 text-white" />
-                                            </button>
+                    {/* Enhanced Input Section */}
+                    <div className="w-full max-w-4xl">
+                        <div className="relative group">
+                            {/* Glow effect */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-turquoise-500/20 to-cyan-500/20 rounded-2xl blur-xl opacity-75 group-hover:opacity-100 transition duration-500"></div>
+                            
+                            <div className="relative glass-dark rounded-2xl border-2 border-turquoise-500/30 hover:border-turquoise-500/50 transition-all duration-300 overflow-hidden">
+                                {/* Header */}
+                                <div className="bg-gradient-to-r from-turquoise-500/10 to-cyan-500/10 p-4 border-b border-turquoise-500/20">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="flex space-x-2">
+                                            <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                                            <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                                            <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                                         </div>
-                                    )}
-                                </div>
-                                
-                                {userInput && (
-                                    <div className="mt-4 text-xs text-slate-500 text-center">
-                                        Press the magic wand to enhance your prompt, then send to generate
+                                        <span className="text-turquoise-300 text-sm font-mono">AI_PROMPT_TERMINAL</span>
                                     </div>
-                                )}
+                                </div>
+
+                                {/* Input Area */}
+                                <div className="p-6">
+                                    <div className="flex gap-4">
+                                        <div className="flex-1">
+                                            <textarea
+                                                placeholder="Describe your vision... (e.g., 'Create a modern e-commerce dashboard with dark theme')"
+                                                value={userInput}
+                                                onChange={(e) => setUserInput(e.target.value)}
+                                                className="w-full bg-transparent border-2 border-turquoise-500/20 rounded-xl p-6 text-slate-100 placeholder-turquoise-300/50 focus:border-turquoise-500 focus:ring-0 outline-none font-mono text-lg h-40 resize-none transition-all duration-300 hover:border-turquoise-500/40"
+                                                disabled={isEnhancing}
+                                            />
+                                        </div>
+                                        
+                                        {/* Action Buttons */}
+                                        <div className="flex flex-col gap-3">
+                                            {userInput && (
+                                                <>
+                                                    {/* Enhance Button */}
+                                                    <button
+                                                        onClick={enhancePrompt}
+                                                        disabled={isEnhancing}
+                                                        className={`group relative flex items-center justify-center bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 rounded-xl px-6 py-4 transition-all duration-300 hover-lift ${isEnhancing ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                                    >
+                                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-xl blur opacity-0 group-hover:opacity-50 transition duration-300"></div>
+                                                        {isEnhancing ? (
+                                                            <Loader2 className="h-6 w-6 animate-spin text-white" />
+                                                        ) : (
+                                                            <Wand2 className="h-6 w-6 text-white" />
+                                                        )}
+                                                    </button>
+                                                    
+                                                    {/* Generate Button */}
+                                                    <button
+                                                        onClick={() => onGenerate(userInput)}
+                                                        disabled={isEnhancing}
+                                                        className={`group relative flex items-center justify-center bg-gradient-to-r from-turquoise-500 to-cyan-500 hover:from-turquoise-600 hover:to-cyan-600 rounded-xl px-6 py-4 transition-all duration-300 hover-lift neon-turquoise ${isEnhancing ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                                    >
+                                                        <div className="absolute inset-0 bg-gradient-to-r from-turquoise-400 to-cyan-400 rounded-xl blur opacity-0 group-hover:opacity-50 transition duration-300"></div>
+                                                        <Send className="h-6 w-6 text-white" />
+                                                    </button>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Simple Suggestions */}
-                    <div className="w-full max-w-5xl">
-                        <div className="text-center mb-6">
-                            <p className="text-slate-400 text-sm">Or try one of these examples:</p>
+                    {/* Enhanced Suggestions Grid */}
+                    <div className="w-full max-w-7xl">
+                        <div className="text-center mb-8">
+                            <h3 className="text-2xl font-bold text-turquoise-400 mb-2">Quick Start Templates</h3>
+                            <p className="text-slate-400">Click any suggestion to get started instantly</p>
                         </div>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                            {Lookup?.SUGGSTIONS.slice(0, 6).map((suggestion, index) => (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {Lookup?.SUGGSTIONS.map((suggestion, index) => (
                                 <button
                                     key={index}
                                     onClick={() => onSuggestionClick(suggestion)}
-                                    className="group p-4 bg-slate-900/30 hover:bg-slate-800/50 border border-turquoise-500/10 hover:border-turquoise-500/30 rounded-xl text-left transition-all duration-200"
+                                    className="group relative p-6 glass-dark hover:bg-slate-800/60 border-2 border-turquoise-500/20 rounded-xl text-left transition-all duration-300 hover:border-turquoise-500/50 hover-lift"
                                 >
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-slate-300 text-sm">{suggestion}</span>
-                                        <ArrowRight className="h-4 w-4 text-turquoise-400/60 group-hover:text-turquoise-400 group-hover:translate-x-1 transition-all duration-200" />
+                                    {/* Hover glow */}
+                                    <div className="absolute inset-0 bg-gradient-to-r from-turquoise-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+                                    
+                                    {/* Content */}
+                                    <div className="relative z-10">
+                                        <div className="flex items-start justify-between mb-3">
+                                            <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-pulse"></div>
+                                            <ArrowRight className="h-4 w-4 text-turquoise-400/60 group-hover:text-turquoise-400 group-hover:translate-x-1 transition-all duration-300" />
+                                        </div>
+                                        <span className="text-slate-300 group-hover:text-turquoise-300 font-medium text-sm leading-relaxed transition-colors duration-300">
+                                            {suggestion}
+                                        </span>
                                     </div>
                                 </button>
                             ))}
