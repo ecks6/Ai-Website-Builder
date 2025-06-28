@@ -7,27 +7,24 @@ const Workspace = () => {
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
             {/* Enhanced Animated Background */}
             <div className="absolute inset-0">
-                {/* Enhanced grid pattern */}
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#14b8a6_1px,transparent_1px),linear-gradient(to_bottom,#14b8a6_1px,transparent_1px)] bg-[size:40px_40px] opacity-[0.05]"></div>
+                {/* Grid pattern */}
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#14b8a6_1px,transparent_1px),linear-gradient(to_bottom,#14b8a6_1px,transparent_1px)] bg-[size:40px_40px] opacity-[0.03]"></div>
                 
-                {/* Enhanced floating orbs */}
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-turquoise-500/15 to-cyan-500/15 rounded-full blur-3xl animate-float"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-500/15 to-turquoise-500/15 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gradient-to-r from-turquoise-500/8 to-cyan-500/8 rounded-full blur-3xl"></div>
-                
-                {/* Additional ambient lighting */}
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-turquoise-500/5 via-transparent to-blue-500/5"></div>
+                {/* Floating orbs */}
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-turquoise-500/10 to-cyan-500/10 rounded-full blur-3xl animate-float"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-500/10 to-turquoise-500/10 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gradient-to-r from-turquoise-500/5 to-cyan-500/5 rounded-full blur-3xl"></div>
             </div>
 
             {/* Content */}
             <div className='relative z-10 p-8'>
                 <div className='grid grid-cols-1 lg:grid-cols-4 gap-8 h-[calc(100vh-8rem)]'>
-                    {/* Enhanced Chat Panel */}
+                    {/* Chat Panel */}
                     <div className='lg:col-span-1'>
                         <ChatView />
                     </div>
                     
-                    {/* Enhanced Code Panel */}
+                    {/* Code Panel */}
                     <div className='lg:col-span-3'>
                         <CodeView />
                     </div>
