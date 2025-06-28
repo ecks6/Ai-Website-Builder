@@ -1,7 +1,7 @@
 "use client"
 import Lookup from '@/data/Lookup';
 import { MessagesContext } from '@/context/MessagesContext';
-import { ArrowRight, Sparkles, Send, Wand2, Loader2, Zap, Code2, Rocket } from 'lucide-react';
+import { ArrowRight, Send, Wand2, Loader2 } from 'lucide-react';
 import React, { useContext, useState } from 'react';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -69,52 +69,6 @@ function Hero() {
 
             <div className="container mx-auto px-6 py-20 relative z-10">
                 <div className="flex flex-col items-center justify-center space-y-16">
-                    {/* Hero Header */}
-                    <div className="text-center space-y-8 max-w-5xl">
-                        {/* Status Badge */}
-                        <div className="inline-flex items-center justify-center space-x-3 bg-turquoise-500/10 rounded-full px-8 py-4 mb-8 border border-turquoise-500/30 glass-dark hover-lift group">
-                            <div className="relative">
-                                <Sparkles className="h-6 w-6 text-turquoise-400 animate-spin-slow" />
-                                <div className="absolute inset-0 bg-turquoise-400 rounded-full blur-sm opacity-50 animate-pulse"></div>
-                            </div>
-                            <span className="text-turquoise-400 text-lg font-bold tracking-wider">
-                                NEXT-GEN AI DEVELOPMENT
-                            </span>
-                            <Zap className="h-5 w-5 text-yellow-400 animate-pulse" />
-                        </div>
-
-                        {/* Main Title */}
-                        <div className="space-y-6">
-                            <h1 className="text-7xl md:text-8xl font-black leading-tight">
-                                <span className="block bg-gradient-to-r from-white via-turquoise-200 to-cyan-300 bg-clip-text text-transparent animate-gradient">
-                                    Build The
-                                </span>
-                                <span className="block bg-gradient-to-r from-turquoise-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent text-neon animate-gradient">
-                                    Future
-                                </span>
-                            </h1>
-                            <p className="text-2xl text-slate-300 max-w-4xl mx-auto font-light leading-relaxed">
-                                Transform your wildest ideas into 
-                                <span className="text-turquoise-400 font-semibold"> production-ready code </span>
-                                with AI-powered assistance that thinks like a developer
-                            </p>
-                        </div>
-
-                        {/* Feature Pills */}
-                        <div className="flex flex-wrap justify-center gap-4 mt-8">
-                            {[
-                                { icon: Code2, text: "Smart Code Gen" },
-                                { icon: Zap, text: "Lightning Fast" },
-                                { icon: Rocket, text: "Deploy Ready" }
-                            ].map((feature, index) => (
-                                <div key={index} className="flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-full border border-turquoise-500/20 hover:border-turquoise-500/40 transition-all duration-300 hover-lift">
-                                    <feature.icon className="h-4 w-4 text-turquoise-400" />
-                                    <span className="text-sm text-slate-300 font-medium">{feature.text}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
                     {/* Enhanced Input Section */}
                     <div className="w-full max-w-4xl">
                         <div className="relative group">
