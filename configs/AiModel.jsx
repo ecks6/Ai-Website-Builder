@@ -4,6 +4,57 @@ const {
     HarmBlockThreshold,
 } = require("@google/generative-ai");
 
+// OpenRouter configuration
+const OPENROUTER_API_KEY = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY;
+const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
+
+// Available AI models configuration
+const AI_MODELS = {
+    // Google Gemini models
+    'gemini-2.0-flash-exp': {
+        provider: 'google',
+        name: 'Gemini 2.0 Flash Exp',
+        description: 'Fast and efficient Google model',
+        icon: '🚀',
+        color: 'from-blue-500 to-cyan-500'
+    },
+    
+    // OpenRouter models
+    'deepseek-chat-v3': {
+        provider: 'openrouter',
+        model: 'deepseek/deepseek-chat-v3-0324:free',
+        name: 'DeepSeek Chat V3',
+        description: 'Advanced reasoning and chat capabilities',
+        icon: '🧠',
+        color: 'from-purple-500 to-pink-500'
+    },
+    'deepseek-r1': {
+        provider: 'openrouter',
+        model: 'deepseek/deepseek-r1-0528:free',
+        name: 'DeepSeek R1',
+        description: 'Optimized for complex reasoning tasks',
+        icon: '🔬',
+        color: 'from-indigo-500 to-purple-500'
+    },
+    'gemini-openrouter': {
+        provider: 'openrouter',
+        model: 'google/gemini-2.0-flash-exp:free',
+        name: 'Gemini 2.0 Flash (OpenRouter)',
+        description: 'Google Gemini via OpenRouter',
+        icon: '⚡',
+        color: 'from-green-500 to-teal-500'
+    },
+    'qwen3-235b': {
+        provider: 'openrouter',
+        model: 'qwen/qwen3-235b-a22b:free',
+        name: 'Qwen3 235B',
+        description: 'Large language model with extensive knowledge',
+        icon: '🌟',
+        color: 'from-orange-500 to-red-500'
+    }
+};
+
+// Google Gemini setup (existing)
 const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
 
@@ -32,37 +83,129 @@ const EnhancePromptConfig = {
     topP: 0.8,
     topK: 40,
     maxOutputTokens: 1000,
-    responseMimeType: "application/json",
+    responseMimeType: "text/plain",
 };
 
-export const chatSession = model.startChat({
-    generationConfig,
-    history: [
-    ],
-});
+// OpenRouter API client
+class OpenRouterClient {
+    constructor(apiKey) {
+        this.apiKey = apiKey;
+        this.baseURL = OPENROUTER_BASE_URL;
+    }
 
-export const GenAiCode = model.startChat({
-    generationConfig: CodeGenerationConfig,
-    history: [
-        {
-            role: "user",
-            parts: [
-              {text: "create a to do app: Generate a Project in React. Create multiple components, organizing them in a folder structure.\n\n    Return the response in JSON format with the following schema:\n    {\n      \"projectTitle\": \"\",\n      \"explanation\": \"\",\n      \"files\": {\n        \"/App.js\": {\n          \"code\": \"\"\n        },\n        ...\n      },\n      \"generatedFiles\": []\n    }\n\n    Here's the reformatted and improved version of your prompt:\n\n    Generate a programming code structure for a React project using Vite.\n    Do not create a App.jsx file. There is a App.js file in the project structure, rewrite it.\n    Use Tailwind css for styling.\n\n    Return the response in JSON format with the following schema:\n\n    {\n      \"projectTitle\": \"\",\n      \"explanation\": \"\",\n      \"files\": {\n        \"/App.js\": {\n          \"code\": \"\"\n        },\n        ...\n      },\n      \"generatedFiles\": []\n    }\n\n    Ensure the files field contains all the created files, and the generatedFiles field contains the list of generated files:{\n    \"/App.js\": {\n      \"code\": \"import React from 'react';\\n\\nfunction App() {\\n  return (\\n    <div>\\n      <h1>Hello World</h1>\\n    </div>\\n  );\\n}\\n\\nexport default App;\\n\"\n    }\n    }\n    \n\n    Additionally, include an explanation of the project's structure, purpose, and additional instructions:\n    - For placeholder images, please use https://archive.org/download/\n    - Add Emoji icons whenever needed to give a good user experience\n    - The lucide-react library is also available to be imported IF NECESSARY."},
-            ],
-          },
-          {
-            role: "model",
-            parts: [
-              {text: "```json\n{\n  \"projectTitle\": \"React To-Do App\",\n  \"explanation\": \"This project creates a simple to-do application using React and Tailwind CSS. The application is structured with components organized into a dedicated 'components' folder. This structure promotes code reusability and maintainability. The application will allow users to add tasks to a list, mark them as complete, and remove them. Emoji icons are included to enhance the user experience, but lucide-react icons are not needed for this implementation. The placeholder images will be used for user profile for example (not this case).\",\n  \"files\": {\n    \"/App.js\": {\n      \"code\": \"import React from 'react';\\nimport TodoList from './components/TodoList';\\nimport AddTodo from './components/AddTodo';\\n\\nfunction App() {\\n  return (\\n    <div className=\\\"bg-gray-100 min-h-screen flex flex-col items-center\\\">\\n      <h1 className=\\\"text-3xl font-bold text-center mt-8 mb-4\\\">To-Do List 📝</h1>\\n      <div className=\\\"bg-white p-6 rounded-md shadow-md w-full max-w-md\\\">\\n          <AddTodo />\\n          <TodoList />\\n      </div>\\n    </div>\\n  );\\n}\\n\\nexport default App;\"\n    },\n    \"/components/TodoList.js\": {\n      \"code\": \"import React, { useState, useEffect } from 'react';\\n\\nfunction TodoList() {\\n  const [todos, setTodos] = useState(() => {\\n    const savedTodos = localStorage.getItem('todos');\\n    return savedTodos ? JSON.parse(savedTodos) : [];\\n  });\\n\\n  useEffect(() => {\\n    localStorage.setItem('todos', JSON.stringify(todos));\\n  }, [todos]);\\n\\n  const toggleComplete = (id) => {\\n    setTodos(todos.map(todo =>\\n      todo.id === id ? { ...todo, completed: !todo.completed } : todo\\n    ));\\n  };\\n\\n  const removeTodo = (id) => {\\n    setTodos(todos.filter(todo => todo.id !== id));\\n  };\\n\\n  return (\\n    <ul className=\\\"mt-4\\\">\\n      {todos.map(todo => (\\n        <li key={todo.id} className={`flex justify-between items-center py-2 border-b border-gray-200 ${todo.completed ? 'line-through text-gray-500' : ''}`}>\\n          <span onClick={() => toggleComplete(todo.id)} className=\\\"cursor-pointer flex-1\\\">{todo.text}</span>\\n          <div>\\n            <button onClick={() => removeTodo(todo.id)} className=\\\"ml-2 text-red-500 hover:text-red-700 focus:outline-none\\\">❌</button>\\n          </div>\\n        </li>\\n      ))}\\n    </ul>\\n  );\\n}\\n\\nexport default TodoList;\"\n    },\n    \"/components/AddTodo.js\": {\n      \"code\": \"import React, { useState } from 'react';\\n\\nfunction AddTodo() {\\n  const [text, setText] = useState('');\\n  const [todos, setTodos] = useState(() => {\\n    const savedTodos = localStorage.getItem('todos');\\n    return savedTodos ? JSON.parse(savedTodos) : [];\\n  });\\n\\n  const handleSubmit = (e) => {\\n    e.preventDefault();\\n    if(text.trim() === '') return;\\n    const newTodo = { id: Date.now(), text: text, completed: false };\\n    setTodos([...todos, newTodo]);\\n    setText('');\\n  };\\n\\n  return (\\n    <form onSubmit={handleSubmit} className=\\\"flex\\\">\\n      <input\\n        type=\\\"text\\\"\\n        placeholder=\\\"Add a todo...\\\"        value={text}\\n        onChange={(e) => setText(e.target.value)}\\n        className=\\\"border p-2 rounded-l-md flex-1 focus:outline-none focus:ring focus:border-blue-300\\\"\\n      />\\n      <button type=\\\"submit\\\" className=\\\"bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 focus:outline-none\\\">➕</button>\\n    </form>\\n  );\\n}\\n\\nexport default AddTodo;\"\n    }\n  },\n    \"generatedFiles\": [\n        \"/App.js\",\n        \"/components/TodoList.js\",\n        \"/components/AddTodo.js\"\n    ]\n}\n```\n"},
-            ],
-          },
-    ],
-})
+    async sendMessage(model, messages, config = {}) {
+        if (!this.apiKey) {
+            throw new Error('OpenRouter API key not configured');
+        }
 
-export const enhancePromptSession = model.startChat({
-    generationConfig: EnhancePromptConfig,
-    history: [],
-});
+        const response = await fetch(`${this.baseURL}/chat/completions`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${this.apiKey}`,
+                'Content-Type': 'application/json',
+                'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+                'X-Title': 'AI Website Builder'
+            },
+            body: JSON.stringify({
+                model: model,
+                messages: Array.isArray(messages) ? messages : [{ role: 'user', content: messages }],
+                temperature: config.temperature || 0.7,
+                max_tokens: config.maxOutputTokens || 4096,
+                top_p: config.topP || 0.9,
+                frequency_penalty: 0,
+                presence_penalty: 0,
+                stream: false
+            })
+        });
 
-// const result = await chatSession.sendMessage("INSERT_INPUT_HERE");
-// console.log(result.response.text());
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(`OpenRouter API error: ${response.status} - ${error}`);
+        }
+
+        const data = await response.json();
+        return {
+            response: {
+                text: () => data.choices[0]?.message?.content || ''
+            }
+        };
+    }
+}
+
+// Create OpenRouter client instance
+const openRouterClient = new OpenRouterClient(OPENROUTER_API_KEY);
+
+// AI Session class to handle different providers
+class AISession {
+    constructor(modelId = 'gemini-2.0-flash-exp', config = {}) {
+        this.modelId = modelId;
+        this.modelConfig = AI_MODELS[modelId];
+        this.config = config;
+        this.history = [];
+        
+        if (!this.modelConfig) {
+            throw new Error(`Model ${modelId} not found in configuration`);
+        }
+
+        // Initialize provider-specific session
+        if (this.modelConfig.provider === 'google') {
+            this.session = model.startChat({
+                generationConfig: this.config,
+                history: []
+            });
+        }
+    }
+
+    async sendMessage(prompt) {
+        try {
+            if (this.modelConfig.provider === 'google') {
+                return await this.session.sendMessage(prompt);
+            } else if (this.modelConfig.provider === 'openrouter') {
+                // Convert prompt to messages format if needed
+                let messages;
+                if (typeof prompt === 'string') {
+                    messages = [{ role: 'user', content: prompt }];
+                } else if (Array.isArray(prompt)) {
+                    messages = prompt.map(p => ({ role: 'user', content: p }));
+                } else {
+                    messages = [prompt];
+                }
+
+                return await openRouterClient.sendMessage(
+                    this.modelConfig.model,
+                    messages,
+                    this.config
+                );
+            }
+        } catch (error) {
+            console.error(`Error with ${this.modelId}:`, error);
+            throw error;
+        }
+    }
+}
+
+// Create default sessions (backward compatibility)
+export const chatSession = new AISession('gemini-2.0-flash-exp', generationConfig);
+export const GenAiCode = new AISession('gemini-2.0-flash-exp', CodeGenerationConfig);
+export const enhancePromptSession = new AISession('gemini-2.0-flash-exp', EnhancePromptConfig);
+
+// Export AI models configuration and session creator
+export { AI_MODELS };
+
+// Function to create a session with specific model
+export const createAISession = (modelId, config = {}) => {
+    return new AISession(modelId, config);
+};
+
+// Function to get available models
+export const getAvailableModels = () => {
+    return Object.entries(AI_MODELS).map(([id, config]) => ({
+        id,
+        ...config
+    }));
+};
+
+// Function to check if OpenRouter is configured
+export const isOpenRouterConfigured = () => {
+    return !!OPENROUTER_API_KEY;
+};

@@ -9,6 +9,7 @@ import {
 } from "@codesandbox/sandpack-react";
 import Lookup from '@/data/Lookup';
 import { MessagesContext } from '@/context/MessagesContext';
+import { useAIModel } from '@/context/AIModelContext';
 import axios from 'axios';
 import Prompt from '@/data/Prompt';
 import { useConvex, useMutation } from 'convex/react';
@@ -22,6 +23,7 @@ function CodeView() {
     const [activeTab, setActiveTab] = useState('code');
     const [files, setFiles] = useState({});
     const [environment, setEnvironment] = useState('react');
+    const { selectedModel } = useAIModel();
     const { messages } = useContext(MessagesContext);
     const UpdateFiles = useMutation(api.workspace.UpdateFiles);
     const convex = useConvex();
@@ -76,12 +78,14 @@ function CodeView() {
         setLoading(true);
         const lastMessage = messages[messages?.length - 1];
         const messageEnvironment = lastMessage?.environment || environment;
+        const messageModel = lastMessage?.model || selectedModel;
         
         const PROMPT = JSON.stringify(messages) + " " + Prompt.getCodeGenPrompt(messageEnvironment);
         
         const result = await axios.post('/api/gen-ai-code', {
             prompt: PROMPT,
-            environment: messageEnvironment
+            environment: messageEnvironment,
+            model: messageModel
         });
 
         const processedAiFiles = preprocessFiles(result.data?.files || {});
@@ -366,7 +370,7 @@ function CodeView() {
                             </div>
                             <div className="space-y-2">
                                 <h3 className="text-xl font-bold text-turquoise-400">Generating {envInfo.name} Code</h3>
-                                <p className="text-slate-400">AI is crafting your {environment} project...</p>
+                                <p className="text-slate-400">AI is crafting your {environment} project with {selectedModel}...</p>
                                 <div className="flex justify-center space-x-1">
                                     <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-bounce"></div>
                                     <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>

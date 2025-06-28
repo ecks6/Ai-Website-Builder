@@ -1,6 +1,7 @@
 "use client"
 import Lookup from '@/data/Lookup';
 import { MessagesContext } from '@/context/MessagesContext';
+import { useAIModel } from '@/context/AIModelContext';
 import { ArrowRight, Send, Wand2, Loader2, Zap, Code2, Palette, Sparkles, Globe, Layers } from 'lucide-react';
 import React, { useContext, useState } from 'react';
 import { useMutation } from 'convex/react';
@@ -11,6 +12,7 @@ function Hero() {
     const [userInput, setUserInput] = useState('');
     const [isEnhancing, setIsEnhancing] = useState(false);
     const [selectedEnvironment, setSelectedEnvironment] = useState('react'); // Default to React
+    const { selectedModel } = useAIModel();
     const { messages, setMessages } = useContext(MessagesContext);
     const CreateWorkspace = useMutation(api.workspace.CreateWorkspace);
     const router = useRouter();
@@ -19,12 +21,13 @@ function Hero() {
         const msg = {
             role: 'user',
             content: input,
-            environment: selectedEnvironment // Include environment in message
+            environment: selectedEnvironment,
+            model: selectedModel
         }
         setMessages(msg);
         const workspaceID = await CreateWorkspace({
             messages: [msg],
-            environment: selectedEnvironment // Save environment in workspace
+            environment: selectedEnvironment
         });
         router.push('/workspace/' + workspaceID);
     }
@@ -41,7 +44,8 @@ function Hero() {
                 },
                 body: JSON.stringify({ 
                     prompt: userInput,
-                    environment: selectedEnvironment // Send environment to API
+                    environment: selectedEnvironment,
+                    model: selectedModel
                 }),
             });
 

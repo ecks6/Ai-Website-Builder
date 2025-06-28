@@ -1,15 +1,23 @@
-import { chatSession } from "@/configs/AiModel";
+import { createAISession } from "@/configs/AiModel";
 import Prompt from "@/data/Prompt";
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
     try {
-        const { prompt, environment = 'react' } = await request.json();
+        const { prompt, environment = 'react', model = 'gemini-2.0-flash-exp' } = await request.json();
+        
+        // Create AI session with selected model
+        const aiSession = createAISession(model, {
+            temperature: 0.7,
+            topP: 0.8,
+            topK: 40,
+            maxOutputTokens: 1000,
+        });
         
         // Get environment-specific enhancement rules
         const enhanceRules = Prompt.getEnhancePromptRules(environment);
         
-        const result = await chatSession.sendMessage([
+        const result = await aiSession.sendMessage([
             enhanceRules,
             `Original prompt: ${prompt}`,
             `Target environment: ${environment}`
@@ -19,9 +27,11 @@ export async function POST(request) {
         
         return NextResponse.json({
             enhancedPrompt: text.trim(),
-            environment: environment
+            environment: environment,
+            model: model
         });
     } catch (error) {
+        console.error('Enhance Prompt Error:', error);
         return NextResponse.json({ 
             error: error.message,
             success: false 

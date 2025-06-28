@@ -1,5 +1,6 @@
 "use client"
 import { MessagesContext } from '@/context/MessagesContext';
+import { useAIModel } from '@/context/AIModelContext';
 import { ArrowRight, Send, Loader2Icon, User, Bot, Sparkles } from 'lucide-react';
 import { api } from '@/convex/_generated/api';
 import { useConvex } from 'convex/react';
@@ -13,6 +14,7 @@ import ReactMarkdown from 'react-markdown';
 function ChatView() {
     const { id } = useParams();
     const convex = useConvex();
+    const { selectedModel } = useAIModel();
     const { messages, setMessages } = useContext(MessagesContext);
     const [userInput, setUserInput] = useState();
     const [loading, setLoading] = useState(false);
@@ -42,12 +44,14 @@ function ChatView() {
         setLoading(true);
         const PROMPT = JSON.stringify(messages) + Prompt.CHAT_PROMPT;
         const result = await axios.post('/api/ai-chat', {
-            prompt: PROMPT
+            prompt: PROMPT,
+            model: selectedModel
         });
 
         const aiResp = {
             role: 'ai',
-            content: result.data.result
+            content: result.data.result,
+            model: selectedModel
         }
         setMessages(prev => [...prev, aiResp]);
         await UpdateMessages({
@@ -60,7 +64,8 @@ function ChatView() {
     const onGenerate = (input) => {
         setMessages(prev => [...prev, {
             role: 'user',
-            content: input
+            content: input,
+            model: selectedModel
         }]);
         setUserInput('');
     }
@@ -114,8 +119,13 @@ function ChatView() {
                                         {msg.content}
                                     </ReactMarkdown>
                                 </div>
-                                <div className="text-xs text-slate-500 mt-2 px-2">
-                                    {msg.role === 'user' ? 'You' : 'AI Assistant'}
+                                <div className="text-xs text-slate-500 mt-2 px-2 flex items-center gap-2">
+                                    <span>{msg.role === 'user' ? 'You' : 'AI Assistant'}</span>
+                                    {msg.model && (
+                                        <span className="bg-slate-700/50 px-2 py-0.5 rounded text-xs">
+                                            {msg.model}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -135,7 +145,7 @@ function ChatView() {
                                             <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
                                             <div className="w-2 h-2 bg-turquoise-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
                                         </div>
-                                        <span className="font-medium">Thinking...</span>
+                                        <span className="font-medium">Thinking with {selectedModel}...</span>
                                     </div>
                                 </div>
                             </div>
@@ -180,8 +190,11 @@ function ChatView() {
                             <Sparkles className="h-4 w-4" />
                             <span>Press Enter to send, Shift+Enter for new line</span>
                         </div>
-                        <div className="text-xs text-slate-500">
-                            Powered by AI
+                        <div className="text-xs text-slate-500 flex items-center gap-2">
+                            <span>Powered by</span>
+                            <span className="bg-slate-700/50 px-2 py-0.5 rounded text-xs text-turquoise-400">
+                                {selectedModel}
+                            </span>
                         </div>
                     </div>
                 </div>
