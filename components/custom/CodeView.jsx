@@ -15,7 +15,7 @@ import Prompt from '@/data/Prompt';
 import { useConvex, useMutation } from 'convex/react';
 import { useParams } from 'next/navigation';
 import { api } from '@/convex/_generated/api';
-import { Loader2Icon, Download, Code, Eye, FileText, Zap, Globe, Layers } from 'lucide-react';
+import { Loader2Icon, Download, Code, Eye, FileText, Zap, Globe, Layers, Play } from 'lucide-react';
 import JSZip from 'jszip';
 
 function CodeView() {
@@ -250,6 +250,21 @@ function CodeView() {
                             <Eye className="h-4 w-4" />
                             <span>Preview</span>
                         </button>
+
+                        {/* Run Button - Only show for HTML environment */}
+                        {environment === 'html' && (
+                            <button
+                                onClick={() => setActiveTab('preview')}
+                                className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
+                                    activeTab === 'run' 
+                                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg' 
+                                        : 'text-slate-400 hover:text-emerald-400 hover:bg-slate-700/50'
+                                }`}
+                            >
+                                <Play className="h-4 w-4" />
+                                <span>Run</span>
+                            </button>
+                        )}
                     </div>
 
                     {/* Action Buttons */}
