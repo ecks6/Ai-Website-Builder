@@ -20,7 +20,7 @@ function Hero() {
             role: 'user',
             content: input
         }
-        setMessages(msg);
+        setMessages([msg]); // Fix: Set as array instead of single object
         const workspaceID = await CreateWorkspace({
             messages: [msg],
             selectedEnv: selectedEnv // Pass selected environment
